@@ -29,12 +29,6 @@ export const Footer = () => (
         <p className="mb-6 max-w-xs font-inter text-sm leading-7 text-white/60">
           Crafting unforgettable travel experiences across Kashmir and the world. Personally curated. Always memorable.
         </p>
-        <Link
-          href="/#contact-booking"
-          className="inline-flex items-center gap-2 rounded-full bg-[#ead8ad] px-5 py-3 text-sm font-semibold text-[#0d292b] transition-all hover:-translate-y-0.5 hover:bg-white"
-        >
-          Plan Your Journey
-        </Link>
       </div>
 
       {/* Quick Links */}

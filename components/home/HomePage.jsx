@@ -13,7 +13,11 @@ export function HomePage() {
 
   const handleBookNow = (pkg) => {
     setSelectedPackage(pkg);
-    window.requestAnimationFrame(() => document.getElementById('contact-booking')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    // Scroll smoothly to the booking form on the same page
+    const el = document.getElementById('contact-booking');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (

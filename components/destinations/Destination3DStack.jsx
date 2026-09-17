@@ -12,6 +12,7 @@ import {
 
 export function Destination3DStack({ destinations }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   // Reset activeIndex if filtered list changes
   useEffect(() => {
@@ -29,6 +30,15 @@ export function Destination3DStack({ destinations }) {
     if (total === 0) return;
     setActiveIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
+
+  // Fast auto-rotation timer: advances cards every 1.3s (pauses only during active dragging)
+  useEffect(() => {
+    if (isDragging || total <= 1) return;
+    const timer = setInterval(() => {
+      handleNext();
+    }, 1300);
+    return () => clearInterval(timer);
+  }, [isDragging, total, handleNext]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -154,9 +164,9 @@ export function Destination3DStack({ destinations }) {
                 }}
                 transition={{
                   type: 'spring',
-                  stiffness: 260,
-                  damping: 26,
-                  mass: 0.85,
+                  stiffness: 400,
+                  damping: 28,
+                  mass: 0.55,
                 }}
                 onClick={() => {
                   if (!isFront) {
@@ -166,7 +176,9 @@ export function Destination3DStack({ destinations }) {
                 drag={isFront ? 'x' : false}
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.2}
+                onDragStart={() => setIsDragging(true)}
                 onDragEnd={(e, { offset: dragOffset, velocity }) => {
+                  setIsDragging(false);
                   if (dragOffset.x > 70 || velocity.x > 250) {
                     handlePrev();
                   } else if (dragOffset.x < -70 || velocity.x < -250) {
@@ -211,56 +223,24 @@ export function Destination3DStack({ destinations }) {
                     )}
                   </div>
 
-                  {/* Card Bottom Content Area */}
-                  <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 flex flex-col justify-end z-10">
-                    {/* Country Tag */}
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#c9a45c]" />
-                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#e2c78b]">
-                        {dest.country}
+                  {/* Card Bottom Content Area (Matches Reference Image) */}
+                  <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 flex items-end justify-between z-10">
+                    <div className="flex flex-col text-left">
+                      {/* Destination City Title */}
+                      <h3 className="font-playfair text-xl sm:text-2xl font-black text-white leading-tight drop-shadow-md">
+                        {dest.city || dest.name}
+                      </h3>
+                      
+                      {/* Subtitle */}
+                      <p className="mt-1 text-xs text-white/70 font-sans tracking-wide">
+                        {dest.subtitle || dest.description?.slice(0, 30) || 'Scenic Escape'}
                       </p>
                     </div>
 
-                    {/* Destination City Title */}
-                    <h3 className="font-playfair text-xl sm:text-2xl font-black text-white leading-tight drop-shadow-md">
-                      {dest.city}
-                    </h3>
-
-                    {/* Description (Visible on Front Card) */}
-                    {isFront && (
-                      <motion.p
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1, duration: 0.25 }}
-                        className="mt-2 text-xs text-slate-200/90 leading-relaxed line-clamp-2"
-                      >
-                        {dest.description}
-                      </motion.p>
-                    )}
-
-                    {/* Front Card Action Footer */}
-                    {isFront && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.15, duration: 0.25 }}
-                        className="mt-3.5 pt-3 border-t border-white/15 flex items-center justify-between"
-                      >
-                        <div className="flex flex-col">
-                          <span className="text-[9px] uppercase font-mono tracking-wider text-white/50">
-                            Starting From
-                          </span>
-                          <span className="font-playfair text-base font-bold text-[#e2c78b]">
-                            {dest.startingPrice || '$899'}
-                          </span>
-                        </div>
-
-                        <div className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#c9a45c] via-[#dfbe78] to-[#f3dfab] px-3.5 py-1.5 text-[11px] font-bold text-[#051417] shadow-md">
-                          <span>Explore</span>
-                          <ArrowRightIcon className="h-3 w-3" />
-                        </div>
-                      </motion.div>
-                    )}
+                    {/* Circular Arrow Button (Matches Reference) */}
+                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-white/35 bg-black/40 text-white backdrop-blur-md transition-all duration-300 group-hover:border-[#c9a45c] group-hover:bg-[#c9a45c] group-hover:text-[#051417] shadow-lg shrink-0 ml-3">
+                      <ArrowRightIcon className="h-4 w-4" />
+                    </div>
                   </div>
 
                   {/* Physical 3D Glare Rim */}
@@ -273,7 +253,7 @@ export function Destination3DStack({ destinations }) {
       </div>
 
       {/* ── Navigation Controls & Pagination Deck ── */}
-      <div className="mt-4 flex flex-col sm:flex-row items-center justify-between w-full max-w-3xl px-4 gap-4">
+      <div className="mt-4 flex flex-col sm:flex-row items-center justify-between w-full max-w-3xl px-4 gap-3 sm:gap-4">
         {/* Destination Index Counter */}
         <div className="flex items-center gap-2.5">
           <span className="font-playfair text-xl font-bold text-[#e2c78b]">
