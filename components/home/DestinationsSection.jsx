@@ -4,7 +4,6 @@ import React, { useRef } from 'react';
 import { Container } from '@/components/ui/Container';
 import { Destination3DStack } from '@/components/destinations/Destination3DStack';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import Link from 'next/link';
 
 // 6 Curated destinations matching the exact reference design
 const curatedDestinations = [

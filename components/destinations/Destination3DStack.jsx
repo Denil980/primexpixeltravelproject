@@ -14,10 +14,7 @@ export function Destination3DStack({ destinations }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
-  // Reset activeIndex if filtered list changes
-  useEffect(() => {
-    setActiveIndex(0);
-  }, [destinations]);
+
 
   const total = destinations ? destinations.length : 0;
 
