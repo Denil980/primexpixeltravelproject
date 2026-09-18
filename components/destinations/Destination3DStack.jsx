@@ -54,13 +54,13 @@ export function Destination3DStack({ destinations }) {
   return (
     <div
       className="relative w-full flex flex-col items-center"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {/* ── 3D Fan / Stack Stage Container (Compact Height) ── */}
       <div
         className="relative w-full max-w-5xl h-[440px] sm:h-[480px] md:h-[510px] flex items-center justify-center overflow-visible select-none"
         style={{ perspective: '1200px', perspectiveOrigin: 'center 45%' }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
         {/* Ambient Stage Spotlight Glow */}
         <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 w-[500px] h-[350px] bg-gradient-to-b from-[#c9a45c]/20 via-[#173f3d]/25 to-transparent blur-[90px] rounded-full" />
