@@ -5,9 +5,37 @@ import { XMarkIcon, MapPinIcon, ClockIcon, CheckCircleIcon } from '@heroicons/re
 import { buildWhatsAppBookingUrl } from '@/lib/whatsapp';
 import { getDestinationById } from '@/lib/data/destinations';
 
+const COUNTRIES = [
+  'India',
+  'United Arab Emirates',
+  'Saudi Arabia',
+  'Qatar',
+  'Oman',
+  'Kuwait',
+  'Bahrain',
+  'United States',
+  'United Kingdom',
+  'Australia',
+  'Canada',
+  'Singapore',
+  'Malaysia',
+  'Germany',
+  'France',
+  'Other Country'
+];
+
 export function BookingModal({ isOpen, onClose, selectedPackage }) {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    country: '',
+    adults: '2',
+    children: '0',
+    travelDate: '',
+    specialRequirements: '',
+  });
+
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
@@ -19,8 +47,16 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
   // Reset form when modal opens
   useEffect(() => {
     if (isOpen) {
-      setName('');
-      setPhone('');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        country: '',
+        adults: '2',
+        children: '0',
+        travelDate: '',
+        specialRequirements: '',
+      });
       setError('');
       setSuccess(false);
     }
@@ -43,145 +79,272 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
     return () => window.removeEventListener('keydown', handleKey);
   }, [isOpen, onClose]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!name.trim() || !phone.trim()) {
-      setError('Please enter your name and phone number.');
+
+    // Validation
+    if (!formData.name.trim()) {
+      setError('Please enter your full name.');
       return;
     }
+    if (!formData.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setError('Please enter a valid email address.');
+      return;
+    }
+    if (!formData.phone.trim()) {
+      setError('Please enter your phone number with country code.');
+      return;
+    }
+    if (!formData.country) {
+      setError('Please select your country.');
+      return;
+    }
+    if (!formData.adults || parseInt(formData.adults, 10) < 1) {
+      setError('Please specify at least 1 adult.');
+      return;
+    }
+    if (!formData.travelDate) {
+      setError('Please select your preferred travel date.');
+      return;
+    }
+
     setError('');
     const url = buildWhatsAppBookingUrl({
       packageTitle: selectedPackage?.title || 'Custom Package',
       destination: destinationName || undefined,
       duration: selectedPackage?.duration,
       price: selectedPackage?.price,
-      customerName: name.trim(),
-      customerPhone: phone.trim(),
+      customerName: formData.name.trim(),
+      customerEmail: formData.email.trim(),
+      customerPhone: formData.phone.trim(),
+      country: formData.country,
+      adults: formData.adults,
+      children: formData.children,
+      travelDate: formData.travelDate,
+      notes: formData.specialRequirements,
     });
+
     setSuccess(true);
-    setName('');
-    setPhone('');
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
         onClick={onClose}
       />
 
       {/* Modal card */}
-      <div className="relative z-10 w-full max-w-md rounded-3xl border border-white/15 bg-[#0d2a2d] shadow-2xl overflow-hidden">
+      <div className="relative z-10 w-full max-w-lg rounded-3xl border border-white/15 bg-[#0d2a2d] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Gold top bar */}
-        <div className="h-1 w-full bg-gradient-to-r from-[#c9a45c] to-[#e2c78b]" />
+        <div className="h-1.5 w-full bg-gradient-to-r from-[#c9a45c] via-[#f3dfab] to-[#c9a45c] shrink-0" />
 
-        <div className="p-6 sm:p-8">
-          {/* Header row */}
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#c9a45c] mb-1">Start Your Journey</p>
-              <h2 className="font-playfair text-2xl font-black text-white leading-tight">
-                Book This Package
-              </h2>
-            </div>
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/8 text-white/60 hover:text-white hover:bg-white/15 transition-all duration-200 shrink-0 mt-0.5"
-              aria-label="Close"
-            >
-              <XMarkIcon className="h-4 w-4" />
-            </button>
+        {/* Header - Fixed top */}
+        <div className="p-5 sm:p-6 pb-4 flex items-start justify-between border-b border-white/10 shrink-0 bg-[#0d2a2d]">
+          <div>
+            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#c9a45c] mb-1">Personalized Inquiry</p>
+            <h2 className="font-playfair text-2xl font-black text-white leading-tight">
+              Book Your Experience
+            </h2>
           </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/8 text-white/60 hover:text-white hover:bg-white/15 transition-all duration-200 shrink-0"
+            aria-label="Close"
+          >
+            <XMarkIcon className="h-5 w-5" />
+          </button>
+        </div>
 
-          {/* Selected package info */}
-          {selectedPackage && (
-            <div className="mb-6 rounded-2xl border border-white/10 bg-white/5 p-4">
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#c9a45c] mb-1.5">Selected Package</p>
-              <p className="font-playfair text-lg font-bold text-white leading-snug">{selectedPackage.title}</p>
-              <div className="mt-2 flex flex-wrap gap-3 text-xs text-white/55">
-                {destinationName && (
-                  <span className="flex items-center gap-1">
-                    <MapPinIcon className="h-3.5 w-3.5 text-[#c9a45c]" />
-                    {destinationName}
-                  </span>
-                )}
-                {selectedPackage.duration && (
-                  <span className="flex items-center gap-1">
-                    <ClockIcon className="h-3.5 w-3.5 text-[#c9a45c]" />
-                    {selectedPackage.duration}
-                  </span>
-                )}
-                {selectedPackage.price && (
-                  <span className="font-semibold text-[#e2c78b]">{selectedPackage.price} / person</span>
-                )}
-              </div>
+        {/* Modal Scrollable Body */}
+        <div className="p-5 sm:p-6 overflow-y-auto space-y-5 flex-1 custom-scrollbar">
+
+          {/* Selected Package Badge */}
+          <div className="rounded-2xl border border-[#c9a45c]/30 bg-black/20 p-4">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-[#c9a45c] mb-1">Selected Package</p>
+            <p className="font-playfair text-lg font-bold text-white leading-snug">
+              {selectedPackage?.title || 'Custom Tour Package'}
+            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-white/65">
+              {destinationName && (
+                <span className="flex items-center gap-1">
+                  <MapPinIcon className="h-3.5 w-3.5 text-[#c9a45c]" />
+                  {destinationName}
+                </span>
+              )}
+              {selectedPackage?.duration && (
+                <span className="flex items-center gap-1">
+                  <ClockIcon className="h-3.5 w-3.5 text-[#c9a45c]" />
+                  {selectedPackage.duration}
+                </span>
+              )}
+              {selectedPackage?.price && (
+                <span className="font-semibold text-[#e2c78b] ml-auto">{selectedPackage.price} / person</span>
+              )}
             </div>
-          )}
+          </div>
 
           {/* Success state */}
           {success ? (
             <div className="flex flex-col items-center gap-3 rounded-2xl border border-emerald-400/30 bg-emerald-900/30 px-6 py-8 text-center">
-              <CheckCircleIcon className="h-10 w-10 text-emerald-400" />
-              <p className="font-playfair text-xl text-white">Opening WhatsApp!</p>
-              <p className="text-sm text-white/55">Our travel specialist will reply to you shortly.</p>
+              <CheckCircleIcon className="h-12 w-12 text-emerald-400" />
+              <p className="font-playfair text-2xl font-bold text-white">Opening WhatsApp!</p>
+              <p className="text-sm text-white/70 max-w-xs leading-relaxed">
+                Thank you! Your details have been formatted for instant WhatsApp booking. Our specialist will respond shortly.
+              </p>
               <button
                 type="button"
                 onClick={() => setSuccess(false)}
-                className="mt-2 rounded-full border border-white/20 px-5 py-1.5 text-xs text-white/60 hover:text-white hover:border-[#c9a45c] transition-all"
+                className="mt-3 rounded-xl border border-white/20 px-6 py-2 text-xs font-semibold text-white/80 hover:text-white hover:border-[#c9a45c] transition-all"
               >
-                Book another
+                Modify or Book Another
               </button>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Name */}
+
+              {/* Full Name */}
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1.5">Full Name *</label>
+                <label className="block text-xs font-semibold text-white/80 mb-1">Full Name *</label>
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Your full name"
-                  className="w-full rounded-xl border border-white/15 bg-white/8 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Enter your full name"
+                  className="w-full rounded-xl border border-white/15 bg-white/8 px-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20"
                 />
               </div>
 
-              {/* Phone */}
+              {/* Email */}
               <div>
-                <label className="block text-xs font-semibold text-white/70 mb-1.5">Phone Number *</label>
+                <label className="block text-xs font-semibold text-white/80 mb-1">Email *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="your.email@example.com"
+                  className="w-full rounded-xl border border-white/15 bg-white/8 px-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20"
+                />
+              </div>
+
+              {/* Phone with Country Code */}
+              <div>
+                <label className="block text-xs font-semibold text-white/80 mb-1">Phone (with Country Code) *</label>
                 <input
                   type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+91 98765 43210"
-                  className="w-full rounded-xl border border-white/15 bg-white/8 px-4 py-3 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="e.g. +91 98765 43210"
+                  className="w-full rounded-xl border border-white/15 bg-white/8 px-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20"
                 />
               </div>
 
-              {/* Error */}
+              {/* Country */}
+              <div>
+                <label className="block text-xs font-semibold text-white/80 mb-1">Country *</label>
+                <select
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-white/15 bg-[#091e21] px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20"
+                >
+                  <option value="" disabled>Select country</option>
+                  {COUNTRIES.map((c) => (
+                    <option key={c} value={c} className="bg-[#091e21] text-white">
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Adults & Children (2-col) */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-white/80 mb-1">Number of Adults *</label>
+                  <input
+                    type="number"
+                    name="adults"
+                    min="1"
+                    max="50"
+                    value={formData.adults}
+                    onChange={handleChange}
+                    className="w-full rounded-xl border border-white/15 bg-white/8 px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-white/80 mb-1">Number of Children</label>
+                  <input
+                    type="number"
+                    name="children"
+                    min="0"
+                    max="20"
+                    value={formData.children}
+                    onChange={handleChange}
+                    className="w-full rounded-xl border border-white/15 bg-white/8 px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20"
+                  />
+                </div>
+              </div>
+
+              {/* Preferred Travel Date */}
+              <div>
+                <label className="block text-xs font-semibold text-white/80 mb-1">Preferred Travel Date *</label>
+                <input
+                  type="date"
+                  name="travelDate"
+                  value={formData.travelDate}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-white/15 bg-white/8 px-4 py-2.5 text-sm text-white outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20 [color-scheme:dark]"
+                />
+              </div>
+
+              {/* Special Requirements */}
+              <div>
+                <label className="block text-xs font-semibold text-white/80 mb-1">Special Requirements</label>
+                <textarea
+                  name="specialRequirements"
+                  rows={2}
+                  value={formData.specialRequirements}
+                  onChange={handleChange}
+                  placeholder="Dietary needs, accessibility, celebration, etc."
+                  className="w-full rounded-xl border border-white/15 bg-white/8 px-4 py-2.5 text-sm text-white placeholder:text-white/30 outline-none transition focus:border-[#c9a45c] focus:ring-2 focus:ring-[#c9a45c]/20"
+                />
+              </div>
+
+              {/* Error Message */}
               {error && (
-                <p className="text-xs text-rose-400">{error}</p>
+                <p className="text-xs text-rose-400 bg-rose-950/40 border border-rose-500/30 rounded-lg p-2.5 font-medium">{error}</p>
               )}
 
-              {/* Submit */}
-              <button
-                type="submit"
-                className="w-full rounded-xl py-3.5 text-sm font-bold text-[#051417] transition-all duration-300 hover:brightness-110 active:scale-95 shadow-lg shadow-[#c9a45c]/20 mt-2"
-                style={{ background: 'linear-gradient(135deg, #c9a45c 0%, #f3dfab 100%)' }}
-              >
-                Book Now via WhatsApp 💬
-              </button>
+              {/* Submit Button */}
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  className="w-full rounded-xl py-3.5 text-sm font-bold text-[#051417] transition-all duration-300 hover:brightness-110 active:scale-95 shadow-lg shadow-[#c9a45c]/20"
+                  style={{ background: 'linear-gradient(135deg, #c9a45c 0%, #f3dfab 100%)' }}
+                >
+                  Confirm Booking
+                </button>
+                <p className="mt-2 text-[11px] text-white/40 text-center">
+                  We&apos;ll respond within 24 hours.
+                </p>
+              </div>
 
-              <p className="text-[10px] text-white/25 text-center">
-                No upfront payment · We will contact you shortly
-              </p>
             </form>
           )}
+
         </div>
       </div>
     </div>
