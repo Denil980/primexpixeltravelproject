@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { packages } from '@/lib/data/packages';
 import { getDestinationById } from '@/lib/data/destinations';
-import {
-  ArrowRightIcon,
-  ClockIcon,
-} from '@heroicons/react/24/outline';
+import { ClockIcon } from '@heroicons/react/24/outline';
 
 /* ─── Card dimensions ─────────────────────────────────────────────────────── */
 const CARD_W = 210;   // px
@@ -127,17 +125,13 @@ function Luxury3DCard({ pkg, onBookNow, isActive }) {
             >
               Book Now
             </button>
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onBookNow) onBookNow(pkg);
-              }}
-              aria-label={`Book ${pkg.title}`}
-              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/15 backdrop-blur-md transition-all duration-300 hover:bg-white/35 hover:scale-110 active:scale-95"
+            <Link
+              href={`/package/${pkg.id}`}
+              onClick={(e) => e.stopPropagation()}
+              className="flex-1 text-center rounded-full py-1.5 text-[10px] font-bold border border-white/30 bg-white/10 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/25 active:scale-95"
             >
-              <ArrowRightIcon className="h-3.5 w-3.5 text-white" />
-            </button>
+              View Details
+            </Link>
           </div>
         </div>
 
@@ -161,8 +155,8 @@ function Luxury3DCard({ pkg, onBookNow, isActive }) {
 export const FeaturedPackages = ({ onBookNow }) => {
   const sectionRef = useRef(null);
 
-  const featuredPkgs = packages.filter((p) => p.featured).slice(0, 6);
-  const total = featuredPkgs.length; // 6
+  const featuredPkgs = packages.filter((p) => p.featured).slice(0, 5);
+  const total = featuredPkgs.length; // 5
 
   /*
    * Infinite carousel:  render 3 copies of the cards.
