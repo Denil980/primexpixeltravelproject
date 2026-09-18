@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { PackageItineraryAccordion } from '@/components/packages/PackageItineraryAccordion';
+import { BookNowButton } from '@/components/home/BookNowButton';
 import { getDestinationById } from '@/lib/data/destinations';
 import { packages } from '@/lib/data/packages';
 import {
@@ -272,15 +273,13 @@ export default async function PackagePage({ params }) {
                   </div>
                 </div>
                 <div className="h-px bg-white/8" />
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <BookNowButton
+                  pkg={pkg}
                   className="block w-full text-center rounded-xl py-4 text-sm font-bold text-[#051417] transition-all duration-300 hover:brightness-110 active:scale-95 shadow-lg shadow-[#c9a45c]/20"
                   style={{ background: 'linear-gradient(135deg, #c9a45c 0%, #f3dfab 100%)' }}
                 >
                   Book Now
-                </a>
+                </BookNowButton>
                 <p className="text-[10px] text-white/25 text-center">
                   No upfront payment · Flexible cancellation
                 </p>
@@ -408,15 +407,13 @@ export default async function PackagePage({ params }) {
             <p className="text-base font-semibold text-white">{pkg.title}</p>
             <p className="text-xs text-white/40 mt-0.5">Ready to explore? Book your spot today.</p>
           </div>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <BookNowButton
+            pkg={pkg}
             className="shrink-0 rounded-xl px-8 py-3.5 text-sm font-bold text-[#051417] transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-[#c9a45c]/20"
             style={{ background: 'linear-gradient(135deg, #c9a45c, #f3dfab)' }}
           >
             Book Now
-          </a>
+          </BookNowButton>
         </div>
       </div>
 
