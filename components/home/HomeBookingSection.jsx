@@ -2,80 +2,33 @@
 
 import { useState, useRef } from 'react';
 import emailjs from '@emailjs/browser';
-import { ClockIcon, MapPinIcon, CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { CheckCircleIcon, ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { Button } from '@/components/ui/Button';
-import { getDestinationById } from '@/lib/data/destinations';
-import { buildWhatsAppBookingUrl } from '@/lib/whatsapp';
 
 const EMAILJS_SERVICE  = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
 const EMAILJS_TEMPLATE = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
 const EMAILJS_KEY      = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
-export function HomeBookingSection({ selectedPackage }) {
-  // ── Booking form state ──────────────────────────────────────────────────
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [error, setError] = useState('');
-  const [bookingSuccess, setBookingSuccess] = useState(false);
-
-  // ── Contact form state ──────────────────────────────────────────────────
+export function HomeBookingSection() {
   const contactFormRef = useRef(null);
   const [contact, setContact] = useState({ name: '', email: '', phone: '', message: '' });
-  const [contactStatus, setContactStatus] = useState('idle'); // idle | sending | success | error
+  const [contactStatus, setContactStatus] = useState('idle');
   const [contactError, setContactError] = useState('');
 
-  const destination = selectedPackage ? getDestinationById(selectedPackage.destinationId) : null;
-  const destinationName = destination
-    ? `${destination.city}, ${destination.country}`
-    : selectedPackage?.destination || 'Choose a package above';
-
-  // ── Booking handler — WhatsApp ──────────────────────────────────────────
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!name.trim() || !phone.trim()) {
-      setError('Please enter your name and phone number.');
-      return;
-    }
-    setError('');
-    const whatsappUrl = buildWhatsAppBookingUrl({
-      packageTitle: selectedPackage?.title || 'Custom Package',
-      destination: destinationName !== 'Choose a package above' ? destinationName : undefined,
-      duration: selectedPackage?.duration,
-      price: selectedPackage?.price,
-      customerName: name.trim(),
-      customerPhone: phone.trim(),
-    });
-    setBookingSuccess(true);
-    setName('');
-    setPhone('');
-    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
-  };
-
-  // ── Contact handler — EmailJS ───────────────────────────────────────────
   const handleContactSubmit = async (event) => {
     event.preventDefault();
     setContactError('');
 
-    // Validation
-    if (!contact.name.trim()) {
-      setContactError('Please enter your name.');
-      return;
-    }
+    if (!contact.name.trim()) { setContactError('Please enter your name.'); return; }
     if (!contact.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact.email)) {
-      setContactError('Please enter a valid email address.');
-      return;
+      setContactError('Please enter a valid email address.'); return;
     }
-    if (!contact.message.trim()) {
-      setContactError('Please enter your message.');
-      return;
-    }
+    if (!contact.message.trim()) { setContactError('Please enter your message.'); return; }
 
     setContactStatus('sending');
-
     try {
       await emailjs.send(
-        EMAILJS_SERVICE,
-        EMAILJS_TEMPLATE,
+        EMAILJS_SERVICE, EMAILJS_TEMPLATE,
         {
           from_name:  contact.name.trim(),
           from_email: contact.email.trim(),
@@ -84,7 +37,6 @@ export function HomeBookingSection({ selectedPackage }) {
         },
         EMAILJS_KEY
       );
-
       setContactStatus('success');
       setContact({ name: '', email: '', phone: '', message: '' });
     } catch (err) {
@@ -95,101 +47,10 @@ export function HomeBookingSection({ selectedPackage }) {
   };
 
   return (
-    <>
-      {/* ═══════════════════════════════════════════════════════════════════
-          SECTION 1 — BOOKING (WhatsApp)
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section
-        id="contact-booking"
-        className="scroll-mt-20 w-full overflow-hidden bg-[#0d292b] px-4 py-14 sm:px-6 sm:py-20 text-white"
-      >
-        <div className="mx-auto w-full max-w-5xl rounded-3xl border border-white/20 bg-white/10 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-8 md:p-10">
-          <div className="grid gap-8 md:grid-cols-[1fr_0.9fr] md:items-center">
-            {/* Left — heading + selected package */}
-            <div>
-              <p className="eyebrow mb-4 text-[#ead8ad]">Your next story starts here</p>
-              <h2 className="font-playfair text-4xl leading-tight sm:text-5xl">
-                Let&apos;s shape the journey.
-              </h2>
-              <p className="mt-5 max-w-md leading-7 text-white/70">
-                Choose a package above, then submit your details to receive a personalized travel consultation via WhatsApp.
-              </p>
-              <div className="mt-8 rounded-2xl border border-white/15 bg-black/15 p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#ead8ad]">
-                  Selected package
-                </p>
-                <p className="mt-2 font-playfair text-2xl">
-                  {selectedPackage?.title || 'No package selected yet'}
-                </p>
-                {selectedPackage && (
-                  <div className="mt-3 flex flex-wrap gap-4 text-sm text-white/70">
-                    <span>
-                      <MapPinIcon className="mr-1 inline h-4 w-4 text-[#ead8ad]" />
-                      {destinationName}
-                    </span>
-                    <span>
-                      <ClockIcon className="mr-1 inline h-4 w-4 text-[#ead8ad]" />
-                      {selectedPackage.duration}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Right — booking form */}
-            <form
-              onSubmit={handleSubmit}
-              className="rounded-2xl border border-white/15 bg-[#071c2b]/55 p-5 shadow-xl sm:p-6"
-            >
-              <label htmlFor="home-booking-name" className="mb-2 block text-sm font-semibold text-white/85">
-                Name
-              </label>
-              <input
-                id="home-booking-name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="mb-4 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-white outline-none transition focus:border-[#ead8ad] focus:ring-2 focus:ring-[#ead8ad]/25"
-                placeholder="Your full name"
-              />
-              <label htmlFor="home-booking-phone" className="mb-2 block text-sm font-semibold text-white/85">
-                Phone Number
-              </label>
-              <input
-                id="home-booking-phone"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="mb-4 w-full rounded-xl border border-white/15 bg-white/10 px-4 py-3 text-white outline-none transition focus:border-[#ead8ad] focus:ring-2 focus:ring-[#ead8ad]/25"
-                placeholder="+91 98765 43210"
-              />
-              <p className="mb-5 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/70">
-                Package:{' '}
-                <span className="font-semibold text-white">
-                  {selectedPackage?.title || 'Select a package above'}
-                </span>
-              </p>
-              {error && <p role="alert" className="mb-4 text-sm text-rose-300">{error}</p>}
-              {bookingSuccess && (
-                <div className="mb-4 flex items-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-900/60 p-3 text-sm text-emerald-200">
-                  <CheckCircleIcon className="h-5 w-5 shrink-0" />
-                  <span>Opening WhatsApp… Our travel specialist will reply shortly!</span>
-                </div>
-              )}
-              <Button type="submit" intent="secondary" size="lg" className="w-full">
-                Book via WhatsApp 💬
-              </Button>
-            </form>
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          SECTION 2 — CONTACT (EmailJS)
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section
-        id="contact"
-        className="scroll-mt-20 w-full overflow-hidden bg-[#091f22] px-4 py-14 sm:px-6 sm:py-20 text-white"
-      >
+    <section
+      id="contact"
+      className="scroll-mt-20 w-full overflow-hidden bg-[#091f22] px-4 py-14 sm:px-6 sm:py-20 text-white"
+    >
         <div className="mx-auto w-full max-w-5xl rounded-3xl border border-white/20 bg-white/10 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-8 md:p-10">
           <div className="mb-8">
             <p className="eyebrow mb-3 text-[#ead8ad]">Prefer a message?</p>
@@ -287,7 +148,6 @@ export function HomeBookingSection({ selectedPackage }) {
             </form>
           )}
         </div>
-      </section>
-    </>
+    </section>
   );
 }
