@@ -13,35 +13,38 @@ import {
 export function Destination3DStack({ destinations }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
-
-
+  const [isHovered, setIsHovered] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   const total = destinations ? destinations.length : 0;
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback((isManual = false) => {
     if (total === 0) return;
+    if (isManual) setUserInteracted(true);
     setActiveIndex((prev) => (prev + 1) % total);
   }, [total]);
 
-  const handlePrev = useCallback(() => {
+  const handlePrev = useCallback((isManual = false) => {
     if (total === 0) return;
+    if (isManual) setUserInteracted(true);
     setActiveIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
 
-  // Fast auto-rotation timer: advances cards every 1.3s (pauses only during active dragging)
+  // Auto-rotation timer: advances cards every 1.8s
+  // Pauses if hovering, dragging, or if user explicitly clicked/interacted via arrows
   useEffect(() => {
-    if (isDragging || total <= 1) return;
+    if (isDragging || isHovered || userInteracted || total <= 1) return;
     const timer = setInterval(() => {
-      handleNext();
-    }, 1300);
+      handleNext(false);
+    }, 1800);
     return () => clearInterval(timer);
-  }, [isDragging, total, handleNext]);
+  }, [isDragging, isHovered, userInteracted, total, handleNext]);
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight') handleNext();
-      if (e.key === 'ArrowLeft') handlePrev();
+      if (e.key === 'ArrowRight') handleNext(true);
+      if (e.key === 'ArrowLeft') handlePrev(true);
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -52,7 +55,11 @@ export function Destination3DStack({ destinations }) {
   }
 
   return (
-    <div className="relative w-full flex flex-col items-center">
+    <div
+      className="relative w-full flex flex-col items-center"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       {/* ── 3D Fan / Stack Stage Container (Compact Height) ── */}
       <div
         className="relative w-full max-w-5xl h-[440px] sm:h-[480px] md:h-[510px] flex items-center justify-center overflow-visible select-none"
@@ -161,12 +168,13 @@ export function Destination3DStack({ destinations }) {
                 }}
                 transition={{
                   type: 'spring',
-                  stiffness: 400,
-                  damping: 28,
-                  mass: 0.55,
+                  stiffness: 220,
+                  damping: 24,
+                  mass: 0.6,
                 }}
                 onClick={() => {
                   if (!isFront) {
+                    setUserInteracted(true);
                     setActiveIndex(idx);
                   }
                 }}
@@ -177,9 +185,9 @@ export function Destination3DStack({ destinations }) {
                 onDragEnd={(e, { offset: dragOffset, velocity }) => {
                   setIsDragging(false);
                   if (dragOffset.x > 70 || velocity.x > 250) {
-                    handlePrev();
+                    handlePrev(true);
                   } else if (dragOffset.x < -70 || velocity.x < -250) {
-                    handleNext();
+                    handleNext(true);
                   }
                 }}
               >
@@ -269,6 +277,7 @@ export function Destination3DStack({ destinations }) {
               key={dest.id}
               type="button"
               onClick={() => {
+                setUserInteracted(true);
                 setActiveIndex(i);
               }}
               className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -285,7 +294,7 @@ export function Destination3DStack({ destinations }) {
         <div className="flex items-center gap-2.5">
           <button
             type="button"
-            onClick={handlePrev}
+            onClick={() => handlePrev(true)}
             aria-label="Previous Destination"
             className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition-all duration-300 hover:border-[#c9a45c] hover:bg-[#c9a45c] hover:text-[#051417] hover:shadow-[0_0_15px_rgba(201,164,92,0.5)] active:scale-95"
           >
@@ -294,7 +303,7 @@ export function Destination3DStack({ destinations }) {
 
           <button
             type="button"
-            onClick={handleNext}
+            onClick={() => handleNext(true)}
             aria-label="Next Destination"
             className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition-all duration-300 hover:border-[#c9a45c] hover:bg-[#c9a45c] hover:text-[#051417] hover:shadow-[0_0_15px_rgba(201,164,92,0.5)] active:scale-95"
           >
