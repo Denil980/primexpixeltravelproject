@@ -14,7 +14,6 @@ import {
   StarIcon,
   SparklesIcon,
   ShieldCheckIcon,
-  PhoneIcon,
   CameraIcon,
   UsersIcon,
 } from '@heroicons/react/24/outline';
@@ -116,13 +115,6 @@ function BookingCard({ pkg, destinationName }) {
             >
               Book Now via WhatsApp
             </a>
-            <Link
-              href="/contact"
-              className="flex items-center justify-center gap-2 w-full rounded-xl py-3 text-sm font-semibold text-white/80 border border-white/15 bg-white/5 hover:bg-white/10 transition-all duration-300"
-            >
-              <PhoneIcon className="h-4 w-4 text-[#c9a45c]" />
-              Talk to a Travel Specialist
-            </Link>
           </div>
           <p className="text-[10px] text-white/30 text-center leading-relaxed">
             No upfront payment required. Flexible cancellation policy.
