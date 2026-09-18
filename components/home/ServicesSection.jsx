@@ -218,7 +218,7 @@ export const ServicesSection = () => {
         <div className="mb-16">
           <div className="max-w-2xl">
             <h2 className="font-playfair text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.05]">
-              Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f3dfab] via-[#c9a45c] to-[#e2c78b] drop-shadow-[0_2px_15px_rgba(201,164,92,0.3)]">Services.</span>
+              Why Travel <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#f3dfab] via-[#c9a45c] to-[#e2c78b] drop-shadow-[0_2px_15px_rgba(201,164,92,0.3)]">With Us.</span>
             </h2>
           </div>
         </div>
