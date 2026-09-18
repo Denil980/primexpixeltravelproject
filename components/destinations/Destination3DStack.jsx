@@ -61,13 +61,13 @@ export function Destination3DStack({ destinations }) {
     };
   }, []);
 
-  // Auto-rotation timer: advances cards every 2.0s
+  // Auto-rotation timer: advances cards every 3.2s
   // Pauses on hover/drag; resumes when cursor leaves
   useEffect(() => {
     if (isDragging || isHovered || total <= 1) return;
     const timer = setInterval(() => {
       handleNext();
-    }, 2000);
+    }, 3200);
     return () => clearInterval(timer);
   }, [isDragging, isHovered, total, handleNext]);
 
@@ -177,15 +177,15 @@ export function Destination3DStack({ destinations }) {
             return (
               <motion.div
                 key={dest.id}
-                className={`absolute inset-0 rounded-[2rem] overflow-hidden cursor-pointer ${
+                className={`absolute inset-0 rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-300 ${
                   isFront
-                    ? 'shadow-[0_25px_60px_-10px_rgba(0,0,0,0.95),0_0_30px_rgba(201,164,92,0.35)] border-2 border-[#c9a45c]'
-                    : 'shadow-[0_15px_35px_rgba(0,0,0,0.85)] border border-white/15 hover:border-[#c9a45c]/50'
+                    ? 'shadow-[0_20px_50px_-10px_rgba(15,23,42,0.25)] border-2 border-[#b8860b]'
+                    : 'shadow-[0_10px_25px_rgba(15,23,42,0.10)] border border-slate-200 hover:border-[#b8860b]/50'
                 }`}
                 style={{
                   zIndex,
                   transformStyle: 'preserve-3d',
-                  backgroundColor: '#051417',
+                  backgroundColor: '#ffffff',
                 }}
                 animate={{
                   x,
@@ -197,10 +197,8 @@ export function Destination3DStack({ destinations }) {
                   opacity,
                 }}
                 transition={{
-                  type: 'spring',
-                  stiffness: 220,
-                  damping: 24,
-                  mass: 0.6,
+                  duration: 0.85,
+                  ease: [0.22, 1, 0.36, 1],
                 }}
                 onClick={() => {
                   if (!isFront) {
@@ -231,48 +229,47 @@ export function Destination3DStack({ destinations }) {
 
                   {/* Dimmer Scrim for Background Cards */}
                   {!isFront && (
-                    <div className="absolute inset-0 bg-[#051417]/50 backdrop-blur-[0.5px] transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-white/10 transition-opacity duration-300 pointer-events-none" />
                   )}
 
-                  {/* Dark Multi-layer Gradient Scrim for Contrast */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#030a0c] via-[#040e10]/60 to-black/25" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-transparent" />
+                  {/* Bottom Gradient Scrim for 100% High-Contrast Text Legibility */}
+                  <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/90 via-black/50 to-transparent pointer-events-none" />
 
                   {/* Top Badge Ribbon */}
                   <div className="absolute top-4 inset-x-4 flex items-center justify-between z-10">
-                    <div className="flex items-center gap-1.5 rounded-full border border-white/20 bg-black/60 px-3 py-1 backdrop-blur-md">
-                      <MapPinIcon className="h-3 w-3 text-[#e2c78b]" />
+                    <div className="flex items-center gap-1.5 rounded-full border border-white/25 bg-black/70 px-3 py-1 backdrop-blur-md shadow-md">
+                      <MapPinIcon className="h-3 w-3 text-[#fef08a]" />
                       <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-white">
                         {dest.code || dest.country.slice(0, 3).toUpperCase()}
                       </span>
                     </div>
 
                     {dest.featured && (
-                      <div className="flex items-center gap-1 rounded-full border border-[#c9a45c]/50 bg-[#c9a45c]/25 px-2.5 py-0.5 backdrop-blur-md">
-                        <SparklesIcon className="h-2.5 w-2.5 text-[#f3dfab]" />
-                        <span className="text-[9px] font-bold uppercase tracking-widest text-[#f3dfab]">
+                      <div className="flex items-center gap-1 rounded-full border border-[#d4af37]/60 bg-[#0f2c3f]/80 px-2.5 py-0.5 backdrop-blur-md shadow-md">
+                        <SparklesIcon className="h-2.5 w-2.5 text-[#fef08a]" />
+                        <span className="text-[9px] font-bold uppercase tracking-widest text-[#fef08a]">
                           Signature
                         </span>
                       </div>
                     )}
                   </div>
 
-                  {/* Card Bottom Content Area (Matches Reference Image) */}
+                  {/* Card Bottom Content Area */}
                   <div className="absolute bottom-0 inset-x-0 p-5 sm:p-6 flex items-end justify-between z-10">
                     <div className="flex flex-col text-left">
                       {/* Destination City Title */}
-                      <h3 className="font-playfair text-xl sm:text-2xl font-black text-white leading-tight drop-shadow-md">
+                      <h3 className="font-playfair text-xl sm:text-2xl font-black text-white leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]">
                         {dest.city || dest.name}
                       </h3>
                       
                       {/* Subtitle */}
-                      <p className="mt-1 text-xs text-white/70 font-sans tracking-wide">
+                      <p className="mt-1 text-xs text-white/90 font-sans font-semibold tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                         {dest.subtitle || dest.description?.slice(0, 30) || 'Scenic Escape'}
                       </p>
                     </div>
 
-                    {/* Circular Arrow Button (Matches Reference) */}
-                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-white/35 bg-black/40 text-white backdrop-blur-md transition-all duration-300 group-hover:border-[#c9a45c] group-hover:bg-[#c9a45c] group-hover:text-[#051417] shadow-lg shrink-0 ml-3">
+                    {/* Circular Arrow Button */}
+                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-white/40 bg-black/60 text-white backdrop-blur-md transition-all duration-300 group-hover:border-[#b8860b] group-hover:bg-[#b8860b] group-hover:text-white shadow-lg shrink-0 ml-3">
                       <ArrowRightIcon className="h-4 w-4" />
                     </div>
                   </div>
@@ -290,11 +287,11 @@ export function Destination3DStack({ destinations }) {
       <div className="mt-4 flex flex-col sm:flex-row items-center justify-between w-full max-w-3xl px-4 gap-3 sm:gap-4">
         {/* Destination Index Counter */}
         <div className="flex items-center gap-2.5">
-          <span className="font-playfair text-xl font-bold text-[#e2c78b]">
+          <span className="font-playfair text-xl font-bold text-[#0f2c3f]">
             {String(activeIndex + 1).padStart(2, '0')}
           </span>
-          <div className="h-3.5 w-[1px] bg-white/20" />
-          <span className="font-mono text-xs text-white/50">
+          <div className="h-3.5 w-[1px] bg-slate-300" />
+          <span className="font-mono text-xs text-slate-600 font-medium">
             {String(total).padStart(2, '0')} Expeditions
           </span>
         </div>
@@ -310,8 +307,8 @@ export function Destination3DStack({ destinations }) {
               }}
               className={`h-1.5 rounded-full transition-all duration-300 ${
                 i === activeIndex
-                  ? 'w-7 bg-gradient-to-r from-[#c9a45c] to-[#e2c78b] shadow-[0_0_8px_rgba(201,164,92,0.8)]'
-                  : 'w-1.5 bg-white/25 hover:bg-white/45'
+                  ? 'w-7 bg-gradient-to-r from-[#0f2c3f] to-[#1e4d6b] shadow-sm'
+                  : 'w-1.5 bg-slate-300 hover:bg-slate-400'
               }`}
               aria-label={`Go to ${dest.city}`}
             />

@@ -79,7 +79,7 @@ function Luxury3DCard({ pkg, onBookNow, isActive }) {
         />
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/28 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
 
         {/* Active badge */}
         {isActive && (
@@ -213,33 +213,24 @@ export const FeaturedPackages = ({ onBookNow }) => {
     <section
       ref={sectionRef}
       id="featured-packages"
-      className="relative w-full overflow-hidden bg-[#07191d]"
+      className="relative w-full overflow-hidden bg-[#F8FAFC] py-8"
     >
       {/* ── Ambient Backdrop ── */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-[#173f3d]/40 blur-3xl" />
-        <div className="absolute top-48 right-1/4 h-96 w-96 rounded-full bg-[#c9a45c]/15 blur-3xl" />
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage: 'radial-gradient(rgba(234,216,173,0.3) 1px, transparent 1px)',
-            backgroundSize: '32px 32px',
-          }}
-        />
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/40 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#040d0f] to-transparent" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-40">
+        <div className="absolute -top-32 left-1/4 h-96 w-96 rounded-full bg-slate-200/60 blur-3xl" />
+        <div className="absolute top-48 right-1/4 h-96 w-96 rounded-full bg-amber-100/50 blur-3xl" />
       </div>
 
       {/* ── Section sub-header ── */}
-      <div className="relative mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
-        <div className="mb-8 border-b border-white/10 pb-6">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="h-2 w-2 rounded-full bg-[#c9a45c] animate-ping" />
-            <span className="font-inter text-xs font-bold uppercase tracking-[0.3em] text-[#e2c78b]">
+      <div className="relative mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+        <div className="mb-8 border-b border-slate-200 pb-6">
+          <div className="flex items-center gap-2 mb-2 px-3 py-1 w-fit rounded-full bg-[#b8860b]/10 border border-[#b8860b]/20">
+            <span className="h-2 w-2 rounded-full bg-[#b8860b] animate-ping" />
+            <span className="font-inter text-xs font-bold uppercase tracking-[0.25em] text-[#a17a24]">
               Handcrafted Itineraries
             </span>
           </div>
-          <h2 className="font-playfair text-2xl sm:text-3xl font-bold text-white sm:text-4xl">
+          <h2 className="font-playfair text-2xl sm:text-3xl font-bold text-[#0f2c3f] sm:text-4xl">
             Featured journeys of a lifetime.
           </h2>
         </div>
@@ -253,8 +244,8 @@ export const FeaturedPackages = ({ onBookNow }) => {
         onMouseLeave={() => setIsPaused(false)}
       >
         {/* Left + Right fade vignettes */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-20 bg-gradient-to-r from-[#07191d] to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-20 bg-gradient-to-l from-[#07191d] to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-24 z-20 bg-gradient-to-r from-[#F8FAFC] to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-24 z-20 bg-gradient-to-l from-[#F8FAFC] to-transparent" />
 
         {/* Sliding strip */}
         <div

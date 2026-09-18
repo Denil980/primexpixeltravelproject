@@ -13,7 +13,7 @@ const navLinks = [
 ];
 
 export const Footer = () => (
-  <footer className="w-full overflow-hidden bg-[#0d292b] text-white">
+  <footer className="w-full overflow-hidden bg-[#0f2c3f] text-white">
     {/* Top Section */}
     <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 py-16 sm:grid-cols-2 sm:px-6 lg:grid-cols-[1.2fr_0.8fr_0.8fr_1fr] lg:px-8">
       {/* Brand */}

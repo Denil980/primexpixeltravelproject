@@ -57,11 +57,9 @@ export function HeroExperience() {
     offset: ['start start', 'end start'],
   });
 
-  // Left column drifts up-left on scroll
   const leftY = useTransform(scrollYProgress, [0, 1], [0, -80]);
   const leftOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
 
-  // Globe drifts up-right slightly
   const globeY = useTransform(scrollYProgress, [0, 1], [0, -40]);
   const globeScale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
 
@@ -71,29 +69,29 @@ export function HeroExperience() {
   };
 
   return (
-    <div className="relative w-full overflow-hidden bg-[#071924]">
+    <div className="relative w-full overflow-hidden bg-[#F8FAFC]">
       {/* ── Hero Section ── */}
       <section
         ref={heroRef}
         id="hero"
         className="relative min-h-[92vh] lg:min-h-screen w-full flex flex-col justify-between pt-24 sm:pt-28 pb-12 overflow-hidden"
       >
-        {/* Night Sky Volumetric Gradient */}
-        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_35%,#13334c_0%,#081b2a_45%,#040d15_100%)]" />
+        {/* Soft Volumetric Gradient */}
+        <div className="pointer-events-none absolute inset-0 z-0 bg-[radial-gradient(circle_at_70%_35%,#E2E8F0_0%,#F8FAFC_55%,#FFFFFF_100%)]" />
 
-        {/* Twinkling Stars */}
+        {/* Subtle Ambient Dots */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-0 opacity-40"
+          className="pointer-events-none absolute inset-0 z-0 opacity-25"
           style={{
             backgroundImage:
-              'radial-gradient(1.5px 1.5px at 15% 20%, #ffffff 100%, transparent), radial-gradient(1.5px 1.5px at 45% 15%, #fef08a 100%, transparent), radial-gradient(1px 1px at 80% 25%, #ffffff 100%, transparent), radial-gradient(1.5px 1.5px at 30% 65%, #38bdf8 100%, transparent), radial-gradient(1.2px 1.2px at 70% 70%, #ffffff 100%, transparent), radial-gradient(1px 1px at 85% 85%, #fef08a 100%, transparent)',
+              'radial-gradient(1.5px 1.5px at 15% 20%, #0f2c3f 100%, transparent), radial-gradient(1.5px 1.5px at 45% 15%, #b8860b 100%, transparent), radial-gradient(1px 1px at 80% 25%, #0f2c3f 100%, transparent), radial-gradient(1.5px 1.5px at 30% 65%, #0284c7 100%, transparent)',
             backgroundSize: '240px 240px',
           }}
         />
 
         {/* Ground fade */}
-        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-96 bg-gradient-to-t from-[#040e16] via-[#071a28]/60 to-transparent z-0" />
+        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-48 bg-gradient-to-t from-[#F8FAFC] via-[#F8FAFC]/70 to-transparent z-0" />
 
         {/* ── Main Content Grid ── */}
         <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 flex-1 flex flex-col justify-center">
@@ -110,10 +108,10 @@ export function HeroExperience() {
               {/* Eyebrow */}
               <motion.div
                 variants={fadeUp}
-                className="inline-flex items-center gap-2 mb-3 sm:mb-4"
+                className="inline-flex items-center gap-2 mb-3 sm:mb-4 px-3 py-1 rounded-full bg-[#b8860b]/10 border border-[#b8860b]/25"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-[#c9a45c] animate-ping" />
-                <span className="font-mono text-[10px] sm:text-[13px] font-bold tracking-[0.2em] sm:tracking-[0.3em] uppercase text-[#e2c78b]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#b8860b] animate-ping" />
+                <span className="font-mono text-[10px] sm:text-[12px] font-bold tracking-[0.2em] uppercase text-[#a17a24]">
                   EXPLORE • DREAM • DISCOVER
                 </span>
               </motion.div>
@@ -121,10 +119,10 @@ export function HeroExperience() {
               {/* Headline */}
               <motion.h1
                 variants={fadeUp}
-                className="font-playfair text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-white tracking-tight leading-[0.95] drop-shadow-lg"
+                className="font-playfair text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-black text-[#0f2c3f] tracking-tight leading-[0.95]"
               >
                 The World <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#fef08a] via-[#dfbe78] to-[#c9a45c] drop-shadow-[0_4px_25px_rgba(201,164,92,0.35)]">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#b8860b] via-[#d4af37] to-[#a17a24]">
                   Awaits You
                 </span>
               </motion.h1>
@@ -132,7 +130,7 @@ export function HeroExperience() {
               {/* Description */}
               <motion.p
                 variants={fadeUp}
-                className="mt-4 sm:mt-5 max-w-md font-sans text-sm sm:text-base text-slate-200/90 leading-relaxed font-normal"
+                className="mt-4 sm:mt-5 max-w-md font-sans text-sm sm:text-base text-slate-600 leading-relaxed font-normal"
               >
                 Discover breathtaking destinations, curated travel experiences, and unforgettable memories — all in one place.
               </motion.p>
@@ -145,7 +143,7 @@ export function HeroExperience() {
                 <button
                   type="button"
                   onClick={scrollToDestinations}
-                  className="group inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#c9a45c] via-[#dfbe78] to-[#f3dfab] px-6 sm:px-7 py-3 sm:py-3.5 text-xs sm:text-sm font-bold text-[#051417] shadow-[0_4px_25px_rgba(201,164,92,0.5)] transition-all duration-300 hover:scale-105 hover:shadow-[0_8px_35px_rgba(201,164,92,0.7)] active:scale-95"
+                  className="group inline-flex items-center gap-2.5 rounded-full bg-[#0f2c3f] px-6 sm:px-7 py-3 sm:py-3.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-[#0f2c3f]/20 transition-all duration-300 hover:bg-[#1e4d6b] hover:scale-105 active:scale-95"
                 >
                   <span>Start Your Journey</span>
                   <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
@@ -168,15 +166,15 @@ export function HeroExperience() {
                       key={i}
                       src={imgUrl}
                       alt="Traveler"
-                      className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-[#051417] object-cover"
+                      className="inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white object-cover"
                     />
                   ))}
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-playfair text-sm sm:text-base font-bold text-white leading-tight">
+                  <span className="font-playfair text-sm sm:text-base font-bold text-[#0f2c3f] leading-tight">
                     10K+
                   </span>
-                  <span className="text-[11px] text-[#e2c78b] font-medium tracking-wide">
+                  <span className="text-[11px] text-[#b8860b] font-semibold tracking-wide">
                     Happy Travellers
                   </span>
                 </div>
@@ -193,12 +191,12 @@ export function HeroExperience() {
             >
               <EarthGlobe />
 
-              {/* Rustic Signpost — hidden on small mobile */}
+              {/* Rustic Signpost */}
               <div className="pointer-events-none absolute bottom-4 -right-2 sm:right-2 hidden sm:flex flex-col items-end gap-1.5 z-20">
                 {['NEW PLACES', 'NEW STORIES', 'SAME YOU', 'A HAPPIER YOU'].map((text, idx) => (
                   <div
                     key={text}
-                    className="relative bg-gradient-to-r from-[#2c1d11] to-[#452f1e] text-[#f4ebd0] text-[10px] font-bold font-mono tracking-widest px-3 py-1 rounded-sm shadow-md border-l-2 border-[#8c6239]"
+                    className="relative bg-[#0f2c3f] text-white text-[11px] font-black font-mono tracking-widest px-3 py-1 rounded-sm shadow-lg border-l-4 border-[#b8860b]"
                     style={{ transform: `rotate(${idx % 2 === 0 ? 2 : -2}deg)` }}
                   >
                     {text}
@@ -221,10 +219,10 @@ export function HeroExperience() {
             type="button"
             onClick={scrollToDestinations}
             aria-label="Scroll to explore"
-            className="group flex flex-col items-center gap-1.5 text-white/70 hover:text-[#e2c78b] transition-colors"
+            className="group flex flex-col items-center gap-1.5 text-slate-500 hover:text-[#b8860b] transition-colors"
           >
-            <div className="w-5 h-8 rounded-full border-2 border-white/40 flex items-start justify-center p-1 group-hover:border-[#c9a45c]">
-              <span className="w-1 h-2 rounded-full bg-[#e2c78b] animate-bounce" />
+            <div className="w-5 h-8 rounded-full border-2 border-slate-400 flex items-start justify-center p-1 group-hover:border-[#b8860b]">
+              <span className="w-1 h-2 rounded-full bg-[#b8860b] animate-bounce" />
             </div>
             <span className="text-[10px] font-mono uppercase tracking-[0.25em] font-semibold">
               SCROLL TO EXPLORE
@@ -234,24 +232,14 @@ export function HeroExperience() {
         </motion.div>
       </section>
 
-      {/* ── Trust Ribbon ── */}
+      {/* ── Trust Ribbon Bar ── */}
       <motion.section
         ref={ribbonRef}
-        className="relative w-full bg-[#f6f2e9] text-[#0f2427] py-8 sm:py-10 z-20 shadow-2xl"
+        className="relative w-full bg-[#0f2c3f] text-white py-8 sm:py-10 z-20 shadow-xl"
         initial="hidden"
         animate={isRibbonInView ? 'visible' : 'hidden'}
         variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.12 } } }}
       >
-        {/* Torn Paper Top */}
-        <div
-          className="absolute -top-3.5 inset-x-0 h-4 bg-repeat-x bg-top opacity-95"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 1200 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 16 C 150 0 300 16 450 4 C 600 20 750 2 900 14 C 1050 0 1200 16 1200 16 L1200 16 L0 16 Z' fill='%23f6f2e9'/%3E%3C/svg%3E\")",
-            backgroundSize: '1200px 16px',
-          }}
-        />
-
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 items-center">
             {[
@@ -265,25 +253,15 @@ export function HeroExperience() {
                 variants={ribbonItem}
                 className="flex flex-col items-center text-center group"
               >
-                <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-2xl bg-[#c9a45c]/15 text-[#9a752a] group-hover:scale-110 transition-transform">
+                <div className="mb-2 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 text-[#fef08a] group-hover:scale-110 transition-transform">
                   {icon}
                 </div>
-                <h4 className="font-playfair text-sm sm:text-base font-bold text-[#0c2225]">{title}</h4>
-                <p className="mt-0.5 text-xs text-[#526466]">{sub}</p>
+                <h4 className="font-playfair text-sm sm:text-base font-bold text-white">{title}</h4>
+                <p className="mt-0.5 text-xs text-white/65">{sub}</p>
               </motion.div>
             ))}
           </div>
         </div>
-
-        {/* Torn Paper Bottom */}
-        <div
-          className="absolute -bottom-3.5 inset-x-0 h-4 bg-repeat-x bg-bottom opacity-95"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 1200 16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 C 150 16 300 0 450 12 C 600 -4 750 14 900 2 C 1050 16 1200 0 1200 0 L1200 0 L0 0 Z' fill='%23f6f2e9'/%3E%3C/svg%3E\")",
-            backgroundSize: '1200px 16px',
-          }}
-        />
       </motion.section>
     </div>
   );

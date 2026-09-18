@@ -449,16 +449,6 @@ export function EarthGlobe() {
             </svg>
           </div>
         )}
-
-        {/* Gold cursive script */}
-        <div className="pointer-events-none absolute -bottom-6 -right-14 hidden md:block z-20">
-          <span
-            className="font-serif italic text-xl text-[#f3dfab]/72 tracking-wide drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]"
-            style={{ fontFamily: "'Brush Script MT', 'Dancing Script', cursive" }}
-          >
-            Collect Moments<br />&nbsp;&nbsp;Not Things
-          </span>
-        </div>
       </div>
       </div>
     </div>
