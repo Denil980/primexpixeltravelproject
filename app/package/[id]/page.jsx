@@ -208,12 +208,12 @@ export default async function PackagePage({ params }) {
       </div>
 
       {/* ══════════════════════════════════════════
-          4. BODY — 2 columns
+          4. BODY TOP — 2 columns (About + Highlights | Booking card)
       ══════════════════════════════════════════ */}
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-6xl px-4 pt-10 pb-0 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1fr_320px] xl:grid-cols-[1fr_340px]">
 
-          {/* ── LEFT ──────────────────────────────── */}
+          {/* ── LEFT: About + Highlights ─────────── */}
           <div className="space-y-14">
 
             {/* About */}
@@ -237,106 +237,6 @@ export default async function PackagePage({ params }) {
               </section>
             )}
 
-            {/* Itinerary */}
-            <section>
-              <SectionLabel>Day-by-Day Itinerary</SectionLabel>
-              <PackageItineraryAccordion itinerary={pkg.itinerary} />
-            </section>
-
-            {/* Inclusions & Exclusions */}
-            <section>
-              <SectionLabel>What is Included</SectionLabel>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-[#c9a45c]/20 bg-[#0d2a2d] p-5 space-y-3">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-[#c9a45c]">Included</p>
-                  <ul className="space-y-2.5">
-                    {pkg.inclusions.map((item) => (
-                      <li key={item} className="flex items-start gap-2.5 text-sm text-white/65">
-                        <CheckCircleIcon className="h-4 w-4 text-[#c9a45c] shrink-0 mt-0.5" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="rounded-2xl border border-white/8 bg-[#0d2a2d] p-5 space-y-3">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">Not Included</p>
-                  <ul className="space-y-2.5">
-                    {pkg.exclusions.map((item) => (
-                      <li key={item} className="flex items-start gap-2.5 text-sm text-white/45">
-                        <XCircleIcon className="h-4 w-4 text-white/20 shrink-0 mt-0.5" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </section>
-
-            {/* Reviews */}
-            <section>
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex items-center gap-3">
-                  <span className="h-5 w-1 rounded-full bg-gradient-to-b from-[#c9a45c] to-[#e2c78b]" />
-                  <h2 className="font-playfair text-xl sm:text-2xl font-bold text-white">Traveller Reviews</h2>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <Stars rating={5} />
-                  <span className="text-sm font-bold text-white">{avgRating}</span>
-                  <span className="text-xs text-white/40">/ 5</span>
-                </div>
-              </div>
-
-              {/* Rating bar */}
-              <div className="mb-5 rounded-2xl border border-white/8 bg-[#0d2a2d] p-5">
-                <div className="flex items-center gap-6">
-                  <div className="text-center shrink-0 w-24">
-                    <p className="font-playfair text-5xl font-black text-[#e2c78b]">{avgRating}</p>
-                    <div className="mt-1 flex justify-center"><Stars rating={5} /></div>
-                    <p className="mt-1.5 text-[10px] text-white/40">{reviewCount} reviews</p>
-                  </div>
-                  <div className="flex-1 space-y-2">
-                    {[5, 4, 3, 2, 1].map((star) => {
-                      const pct = star === 5 ? 80 : star === 4 ? 15 : star === 3 ? 5 : 0;
-                      return (
-                        <div key={star} className="flex items-center gap-2.5">
-                          <span className="w-3 text-right text-[11px] text-white/40">{star}</span>
-                          <StarSolid className="h-3 w-3 text-[#c9a45c] shrink-0" />
-                          <div className="flex-1 h-1.5 rounded-full bg-white/8 overflow-hidden">
-                            <div className="h-full rounded-full bg-gradient-to-r from-[#c9a45c] to-[#e2c78b] transition-all" style={{ width: pct + '%' }} />
-                          </div>
-                          <span className="w-7 text-[11px] text-white/35">{pct}%</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-
-              {/* Review cards */}
-              <div className="space-y-4">
-                {REVIEWS.map((review) => (
-                  <div key={review.id} className="rounded-2xl border border-white/8 bg-[#0d2a2d] p-5 sm:p-6">
-                    <div className="flex items-start justify-between gap-4 flex-wrap">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-full flex items-center justify-center font-bold text-sm text-[#051417] shrink-0" style={{ background: review.color }}>
-                          {review.avatar}
-                        </div>
-                        <div>
-                          <p className="text-sm font-semibold text-white">{review.name}</p>
-                          <p className="text-[11px] text-white/40">{review.location}</p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <Stars rating={review.rating} />
-                        <p className="mt-1 text-[11px] text-white/35">{review.date}</p>
-                      </div>
-                    </div>
-                    <p className="mt-4 text-sm text-white/55 leading-relaxed">"{review.text}"</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-
           </div>
 
           {/* ── RIGHT — sticky booking card ───────── */}
@@ -346,8 +246,6 @@ export default async function PackagePage({ params }) {
             <div className="rounded-2xl border border-white/10 bg-[#0d2a2d] overflow-hidden shadow-2xl">
               <div className="h-1 w-full bg-gradient-to-r from-[#c9a45c] to-[#e2c78b]" />
               <div className="p-6 space-y-5">
-
-                {/* Price */}
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-white/35">Starting from</span>
                   <div className="mt-1 flex items-baseline gap-2">
@@ -355,8 +253,6 @@ export default async function PackagePage({ params }) {
                     <span className="text-xs text-white/35">/ per person</span>
                   </div>
                 </div>
-
-                {/* Meta details */}
                 <div className="space-y-2.5">
                   <div className="flex items-center gap-3 text-sm text-white/60">
                     <ClockIcon className="h-4 w-4 text-[#c9a45c] shrink-0" />
@@ -375,10 +271,7 @@ export default async function PackagePage({ params }) {
                     <span>Private group · Min 2 persons</span>
                   </div>
                 </div>
-
                 <div className="h-px bg-white/8" />
-
-                {/* Book Now button */}
                 <a
                   href={whatsappUrl}
                   target="_blank"
@@ -388,14 +281,13 @@ export default async function PackagePage({ params }) {
                 >
                   Book Now
                 </a>
-
                 <p className="text-[10px] text-white/25 text-center">
                   No upfront payment · Flexible cancellation
                 </p>
               </div>
             </div>
 
-            {/* Accommodation & Transport card */}
+            {/* Accommodation & Transport */}
             {(pkg.accommodation || pkg.transport) && (
               <div className="rounded-2xl border border-white/8 bg-[#0d2a2d] p-5 space-y-4">
                 <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#c9a45c]">Stay & Transport</p>
@@ -416,6 +308,112 @@ export default async function PackagePage({ params }) {
 
           </div>
         </div>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          5. FULL-WIDTH BELOW — Itinerary, Inclusions, Reviews
+          (spans across both columns, fills space under booking card)
+      ══════════════════════════════════════════ */}
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8 space-y-14">
+
+        {/* Itinerary — full width */}
+        <section>
+          <SectionLabel>Day-by-Day Itinerary</SectionLabel>
+          <PackageItineraryAccordion itinerary={pkg.itinerary} />
+        </section>
+
+        {/* Inclusions & Exclusions — full width, 2 cols internally */}
+        <section>
+          <SectionLabel>What is Included</SectionLabel>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
+            <div className="rounded-2xl border border-[#c9a45c]/20 bg-[#0d2a2d] p-5 space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#c9a45c]">Included</p>
+              <ul className="space-y-2.5">
+                {pkg.inclusions.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-white/65">
+                    <CheckCircleIcon className="h-4 w-4 text-[#c9a45c] shrink-0 mt-0.5" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-white/8 bg-[#0d2a2d] p-5 space-y-3">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-white/30">Not Included</p>
+              <ul className="space-y-2.5">
+                {pkg.exclusions.map((item) => (
+                  <li key={item} className="flex items-start gap-2.5 text-sm text-white/45">
+                    <XCircleIcon className="h-4 w-4 text-white/20 shrink-0 mt-0.5" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Reviews — full width */}
+        <section>
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-3">
+              <span className="h-5 w-1 rounded-full bg-gradient-to-b from-[#c9a45c] to-[#e2c78b]" />
+              <h2 className="font-playfair text-xl sm:text-2xl font-bold text-white">Traveller Reviews</h2>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <Stars rating={5} />
+              <span className="text-sm font-bold text-white">{avgRating}</span>
+              <span className="text-xs text-white/40">/ 5</span>
+            </div>
+          </div>
+
+          {/* Rating summary */}
+          <div className="mb-5 rounded-2xl border border-white/8 bg-[#0d2a2d] p-5">
+            <div className="flex items-center gap-6">
+              <div className="text-center shrink-0 w-24">
+                <p className="font-playfair text-5xl font-black text-[#e2c78b]">{avgRating}</p>
+                <div className="mt-1 flex justify-center"><Stars rating={5} /></div>
+                <p className="mt-1.5 text-[10px] text-white/40">{reviewCount} reviews</p>
+              </div>
+              <div className="flex-1 space-y-2">
+                {[5, 4, 3, 2, 1].map((star) => {
+                  const pct = star === 5 ? 80 : star === 4 ? 15 : star === 3 ? 5 : 0;
+                  return (
+                    <div key={star} className="flex items-center gap-2.5">
+                      <span className="w-3 text-right text-[11px] text-white/40">{star}</span>
+                      <StarSolid className="h-3 w-3 text-[#c9a45c] shrink-0" />
+                      <div className="flex-1 h-1.5 rounded-full bg-white/8 overflow-hidden">
+                        <div className="h-full rounded-full bg-gradient-to-r from-[#c9a45c] to-[#e2c78b]" style={{ width: pct + '%' }} />
+                      </div>
+                      <span className="w-7 text-[11px] text-white/35">{pct}%</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Review cards — 3-col on large screens */}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {REVIEWS.map((review) => (
+              <div key={review.id} className="rounded-2xl border border-white/8 bg-[#0d2a2d] p-5">
+                <div className="flex items-start justify-between gap-2 mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="h-9 w-9 rounded-full flex items-center justify-center font-bold text-sm text-[#051417] shrink-0" style={{ background: review.color }}>
+                      {review.avatar}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white leading-tight">{review.name}</p>
+                      <p className="text-[10px] text-white/40">{review.location}</p>
+                    </div>
+                  </div>
+                </div>
+                <Stars rating={review.rating} />
+                <p className="mt-3 text-sm text-white/55 leading-relaxed">"{review.text}"</p>
+                <p className="mt-3 text-[10px] text-white/30">{review.date}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
       </div>
 
       {/* ══════════════════════════════════════════
