@@ -287,24 +287,7 @@ export default async function PackagePage({ params }) {
               </div>
             </div>
 
-            {/* Accommodation & Transport */}
-            {(pkg.accommodation || pkg.transport) && (
-              <div className="rounded-2xl border border-white/8 bg-[#0d2a2d] p-5 space-y-4">
-                <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#c9a45c]">Stay & Transport</p>
-                {pkg.accommodation && (
-                  <div>
-                    <p className="text-[10px] text-white/35 uppercase tracking-wider mb-1">Accommodation</p>
-                    <p className="text-sm text-white/60 leading-relaxed">{pkg.accommodation}</p>
-                  </div>
-                )}
-                {pkg.transport && (
-                  <div>
-                    <p className="text-[10px] text-white/35 uppercase tracking-wider mb-1">Transport</p>
-                    <p className="text-sm text-white/60 leading-relaxed">{pkg.transport}</p>
-                  </div>
-                )}
-              </div>
-            )}
+
 
           </div>
         </div>
