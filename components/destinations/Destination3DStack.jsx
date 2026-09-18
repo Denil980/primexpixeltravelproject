@@ -3,8 +3,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
   MapPinIcon,
   SparklesIcon,
   ArrowRightIcon,
@@ -320,26 +318,6 @@ export function Destination3DStack({ destinations }) {
           ))}
         </div>
 
-        {/* Previous / Next Arrow Controls */}
-        <div className="flex items-center gap-2.5">
-          <button
-            type="button"
-            onClick={handlePrev}
-            aria-label="Previous Destination"
-            className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition-all duration-300 hover:border-[#c9a45c] hover:bg-[#c9a45c] hover:text-[#051417] hover:shadow-[0_0_15px_rgba(201,164,92,0.5)] active:scale-95"
-          >
-            <ChevronLeftIcon className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-0.5" />
-          </button>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            aria-label="Next Destination"
-            className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition-all duration-300 hover:border-[#c9a45c] hover:bg-[#c9a45c] hover:text-[#051417] hover:shadow-[0_0_15px_rgba(201,164,92,0.5)] active:scale-95"
-          >
-            <ChevronRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </button>
-        </div>
       </div>
     </div>
   );
