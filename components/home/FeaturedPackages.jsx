@@ -1,16 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { packages } from '@/lib/data/packages';
 import { getDestinationById } from '@/lib/data/destinations';
 import {
   ArrowRightIcon,
   ClockIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
 } from '@heroicons/react/24/outline';
-import { Packages3DText } from "../three/homepage/Packages3DText";
 
 /* ─── Card dimensions ─────────────────────────────────────────────────────── */
 const CARD_W = 210;   // px
@@ -163,7 +160,6 @@ function Luxury3DCard({ pkg, onBookNow, isActive }) {
 /* ─── FeaturedPackages Section ───────────────────────────────────────────── */
 export const FeaturedPackages = ({ onBookNow }) => {
   const sectionRef = useRef(null);
-  const [scrollRatio, setScrollRatio] = useState(0);
 
   const featuredPkgs = packages.filter((p) => p.featured).slice(0, 6);
   const total = featuredPkgs.length; // 6
@@ -216,40 +212,6 @@ export const FeaturedPackages = ({ onBookNow }) => {
     }
   }, [animEnabled]);
 
-  /* Manual controls */
-  const goNext = useCallback(() => setStripIdx((p) => p + 1), []);
-  const goPrev = useCallback(() => {
-    setStripIdx((p) => {
-      const next = p - 1;
-      if (next < total) {
-        // Snap to end of second copy then animate back one
-        setAnimEnabled(false);
-        return total * 2 - 1;
-      }
-      return next;
-    });
-  }, [total]);
-
-  /* Section scroll ratio for Packages3DText */
-  useEffect(() => {
-    const handleScroll = () => {
-      const el = sectionRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const windowH = window.innerHeight;
-      const total = rect.height + windowH;
-      const current = windowH - rect.top;
-      setScrollRatio(Math.max(0, Math.min(1, current / total)));
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleScroll);
-    };
-  }, []);
-
   /* Active real index (for dot indicators) */
   const activeRealIdx = stripIdx % total;
 
@@ -274,42 +236,18 @@ export const FeaturedPackages = ({ onBookNow }) => {
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#040d0f] to-transparent" />
       </div>
 
-      {/* ── 3D Typography Header ── */}
-      <div className="relative mx-auto max-w-7xl px-4 pt-20 pb-10 sm:px-6 lg:px-8">
-        <Packages3DText scrollProgress={scrollRatio} />
-      </div>
-
       {/* ── Section sub-header ── */}
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/10 pb-6">
-          <div>
-            <div className="flex items-center gap-2 mb-2">
-              <span className="h-2 w-2 rounded-full bg-[#c9a45c] animate-ping" />
-              <span className="font-inter text-xs font-bold uppercase tracking-[0.3em] text-[#e2c78b]">
-                Handcrafted Itineraries
-              </span>
-            </div>
-            <h2 className="font-playfair text-2xl sm:text-3xl font-bold text-white sm:text-4xl">
-              Featured journeys of a lifetime.
-            </h2>
+      <div className="relative mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+        <div className="mb-8 border-b border-white/10 pb-6">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-2 w-2 rounded-full bg-[#c9a45c] animate-ping" />
+            <span className="font-inter text-xs font-bold uppercase tracking-[0.3em] text-[#e2c78b]">
+              Handcrafted Itineraries
+            </span>
           </div>
-          {/* Prev / Next arrows — visible on all screens */}
-          <div className="flex items-center gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={goPrev}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-all hover:bg-white/15 hover:border-[#c9a45c] active:scale-90"
-            >
-              <ChevronLeftIcon className="h-5 w-5" />
-            </button>
-            <button
-              type="button"
-              onClick={goNext}
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white transition-all hover:bg-white/15 hover:border-[#c9a45c] active:scale-90"
-            >
-              <ChevronRightIcon className="h-5 w-5" />
-            </button>
-          </div>
+          <h2 className="font-playfair text-2xl sm:text-3xl font-bold text-white sm:text-4xl">
+            Featured journeys of a lifetime.
+          </h2>
         </div>
       </div>
 

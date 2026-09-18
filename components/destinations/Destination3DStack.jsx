@@ -14,37 +14,34 @@ export function Destination3DStack({ destinations }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [userInteracted, setUserInteracted] = useState(false);
 
   const total = destinations ? destinations.length : 0;
 
-  const handleNext = useCallback((isManual = false) => {
+  const handleNext = useCallback(() => {
     if (total === 0) return;
-    if (isManual) setUserInteracted(true);
     setActiveIndex((prev) => (prev + 1) % total);
   }, [total]);
 
-  const handlePrev = useCallback((isManual = false) => {
+  const handlePrev = useCallback(() => {
     if (total === 0) return;
-    if (isManual) setUserInteracted(true);
     setActiveIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
 
-  // Auto-rotation timer: advances cards every 1.8s
-  // Pauses if hovering, dragging, or if user explicitly clicked/interacted via arrows
+  // Auto-rotation timer: advances cards every 2.0s
+  // Pauses on hover/drag; resumes when cursor leaves
   useEffect(() => {
-    if (isDragging || isHovered || userInteracted || total <= 1) return;
+    if (isDragging || isHovered || total <= 1) return;
     const timer = setInterval(() => {
-      handleNext(false);
-    }, 1800);
+      handleNext();
+    }, 2000);
     return () => clearInterval(timer);
-  }, [isDragging, isHovered, userInteracted, total, handleNext]);
+  }, [isDragging, isHovered, total, handleNext]);
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'ArrowRight') handleNext(true);
-      if (e.key === 'ArrowLeft') handlePrev(true);
+      if (e.key === 'ArrowRight') handleNext();
+      if (e.key === 'ArrowLeft') handlePrev();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -174,7 +171,6 @@ export function Destination3DStack({ destinations }) {
                 }}
                 onClick={() => {
                   if (!isFront) {
-                    setUserInteracted(true);
                     setActiveIndex(idx);
                   }
                 }}
@@ -185,9 +181,9 @@ export function Destination3DStack({ destinations }) {
                 onDragEnd={(e, { offset: dragOffset, velocity }) => {
                   setIsDragging(false);
                   if (dragOffset.x > 70 || velocity.x > 250) {
-                    handlePrev(true);
+                    handlePrev();
                   } else if (dragOffset.x < -70 || velocity.x < -250) {
-                    handleNext(true);
+                    handleNext();
                   }
                 }}
               >
@@ -277,7 +273,6 @@ export function Destination3DStack({ destinations }) {
               key={dest.id}
               type="button"
               onClick={() => {
-                setUserInteracted(true);
                 setActiveIndex(i);
               }}
               className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -294,7 +289,7 @@ export function Destination3DStack({ destinations }) {
         <div className="flex items-center gap-2.5">
           <button
             type="button"
-            onClick={() => handlePrev(true)}
+            onClick={handlePrev}
             aria-label="Previous Destination"
             className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition-all duration-300 hover:border-[#c9a45c] hover:bg-[#c9a45c] hover:text-[#051417] hover:shadow-[0_0_15px_rgba(201,164,92,0.5)] active:scale-95"
           >
@@ -303,7 +298,7 @@ export function Destination3DStack({ destinations }) {
 
           <button
             type="button"
-            onClick={() => handleNext(true)}
+            onClick={handleNext}
             aria-label="Next Destination"
             className="group relative flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/5 text-white backdrop-blur-md transition-all duration-300 hover:border-[#c9a45c] hover:bg-[#c9a45c] hover:text-[#051417] hover:shadow-[0_0_15px_rgba(201,164,92,0.5)] active:scale-95"
           >

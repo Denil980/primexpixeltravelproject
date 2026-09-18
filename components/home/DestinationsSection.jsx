@@ -3,7 +3,6 @@
 import React, { useRef } from 'react';
 import { Container } from '@/components/ui/Container';
 import { Destination3DStack } from '@/components/destinations/Destination3DStack';
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
 
 // 6 Curated destinations matching the exact reference design
 const curatedDestinations = [
@@ -66,13 +65,6 @@ const curatedDestinations = [
 export function DestinationsSection() {
   const sectionRef = useRef(null);
 
-  const scrollToBooking = () => {
-    const el = document.getElementById('contact-booking');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   return (
     <section
       ref={sectionRef}
@@ -128,18 +120,6 @@ export function DestinationsSection() {
 
         {/* ── 3D Stack / Fan Interactive Cards Deck ── */}
         <Destination3DStack destinations={curatedDestinations} />
-
-        {/* ── Bottom CTA Button: "Explore All Destinations →" ── */}
-        <div className="mt-10 sm:mt-12 flex justify-center">
-          <button
-            type="button"
-            onClick={scrollToBooking}
-            className="group inline-flex items-center gap-2.5 rounded-full border border-[#c9a45c]/60 bg-[#07191d]/80 px-7 py-3 text-xs sm:text-sm font-bold text-[#e2c78b] backdrop-blur-md transition-all duration-300 hover:border-[#c9a45c] hover:bg-[#c9a45c] hover:text-[#051417] hover:shadow-[0_0_25px_rgba(201,164,92,0.45)] active:scale-95"
-          >
-            <span>Explore All Destinations</span>
-            <ArrowRightIcon className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-          </button>
-        </div>
       </Container>
     </section>
   );
