@@ -440,7 +440,10 @@ export function EarthGlobe() {
               viewBox="0 0 24 24"
               width="28" height="28"
               fill="white"
-              style={{ filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.9)) drop-shadow(0 0 12px rgba(150,220,255,0.6))' }}
+              style={{
+                transform: 'rotate(90deg)',
+                filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.9)) drop-shadow(0 0 12px rgba(150,220,255,0.6))',
+              }}
             >
               <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" />
             </svg>
