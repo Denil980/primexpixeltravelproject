@@ -69,8 +69,8 @@ body {
 }
 
 @keyframes earthTextureRotation {
-  from { background-position: 62% 42%; }
-  to { background-position: -38% 42%; }
+  from { background-position: 62% 50%; }
+  to { background-position: -138% 50%; }
 }
 
 .earth-starfield {

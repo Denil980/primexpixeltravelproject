@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import {
   MapPinIcon,
   SparklesIcon,
-  ArrowRightIcon,
 } from '@heroicons/react/24/outline';
 
 export function Destination3DStack({ destinations }) {
@@ -26,48 +25,13 @@ export function Destination3DStack({ destinations }) {
     setActiveIndex((prev) => (prev - 1 + total) % total);
   }, [total]);
 
-  // Reliable hover detection using manual event listeners.
-  // relatedTarget check prevents false mouseleave when moving between child elements.
-  // mousemove fallback ensures isHovered resets even if mouseleave is swallowed by framer-motion drag.
-  useEffect(() => {
-    const el = stageRef.current;
-    if (!el) return;
-
-    const onEnter = () => setIsHovered(true);
-    const onLeave = (e) => {
-      if (el.contains(e.relatedTarget)) return; // still inside a child
-      setIsHovered(false);
-    };
-
-    // Fallback: track mouse position globally to detect when cursor leaves the stage area
-    const onWindowMouseMove = (e) => {
-      const rect = el.getBoundingClientRect();
-      const inside =
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom;
-      setIsHovered(inside);
-    };
-
-    el.addEventListener('mouseenter', onEnter);
-    el.addEventListener('mouseleave', onLeave);
-    window.addEventListener('mousemove', onWindowMouseMove);
-
-    return () => {
-      el.removeEventListener('mouseenter', onEnter);
-      el.removeEventListener('mouseleave', onLeave);
-      window.removeEventListener('mousemove', onWindowMouseMove);
-    };
-  }, []);
-
-  // Auto-rotation timer: advances cards every 3.2s
-  // Pauses on hover/drag; resumes when cursor leaves
+  // Auto-rotation timer: advances cards every 3.5s
+  // Pauses only when dragging or interacting
   useEffect(() => {
     if (isDragging || isHovered || total <= 1) return;
     const timer = setInterval(() => {
       handleNext();
-    }, 3200);
+    }, 3500);
     return () => clearInterval(timer);
   }, [isDragging, isHovered, total, handleNext]);
 
@@ -86,9 +50,7 @@ export function Destination3DStack({ destinations }) {
   }
 
   return (
-    <div
-      className="relative w-full flex flex-col items-center"
-    >
+    <div className="relative w-full flex flex-col items-center">
       {/* ── 3D Fan / Stack Stage Container (Compact Height) ── */}
       <div
         ref={stageRef}
@@ -98,10 +60,12 @@ export function Destination3DStack({ destinations }) {
         {/* Ambient Stage Spotlight Glow */}
         <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 w-[500px] h-[350px] bg-gradient-to-b from-[#c9a45c]/20 via-[#173f3d]/25 to-transparent blur-[90px] rounded-full" />
 
-        {/* ── Layered 3D Cards Deck ── */}
+        {/* ── Layered 3D Cards Deck (Hover target only for actual cards) ── */}
         <div
           className="relative w-[250px] sm:w-[290px] md:w-[325px] h-[360px] sm:h-[405px] md:h-[445px]"
           style={{ transformStyle: 'preserve-3d' }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           {destinations.map((dest, idx) => {
             // Circular relative offset
@@ -177,10 +141,10 @@ export function Destination3DStack({ destinations }) {
             return (
               <motion.div
                 key={dest.id}
-                className={`absolute inset-0 rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-300 ${
+                className={`absolute inset-0 rounded-[2rem] overflow-hidden cursor-pointer ${
                   isFront
                     ? 'shadow-[0_20px_50px_-10px_rgba(15,23,42,0.25)] border-2 border-[#b8860b]'
-                    : 'shadow-[0_10px_25px_rgba(15,23,42,0.10)] border border-slate-200 hover:border-[#b8860b]/50'
+                    : 'shadow-[0_10px_25px_rgba(15,23,42,0.10)] border border-slate-200'
                 }`}
                 style={{
                   zIndex,
@@ -197,8 +161,8 @@ export function Destination3DStack({ destinations }) {
                   opacity,
                 }}
                 transition={{
-                  duration: 0.85,
-                  ease: [0.22, 1, 0.36, 1],
+                  duration: 0.75,
+                  ease: [0.25, 1, 0.5, 1],
                 }}
                 onClick={() => {
                   if (!isFront) {
@@ -266,11 +230,6 @@ export function Destination3DStack({ destinations }) {
                       <p className="mt-1 text-xs text-white/90 font-sans font-semibold tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                         {dest.subtitle || dest.description?.slice(0, 30) || 'Scenic Escape'}
                       </p>
-                    </div>
-
-                    {/* Circular Arrow Button */}
-                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-white/40 bg-black/60 text-white backdrop-blur-md transition-all duration-300 group-hover:border-[#b8860b] group-hover:bg-[#b8860b] group-hover:text-white shadow-lg shrink-0 ml-3">
-                      <ArrowRightIcon className="h-4 w-4" />
                     </div>
                   </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { XMarkIcon, MapPinIcon, ClockIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { buildWhatsAppBookingUrl } from '@/lib/whatsapp';
 import { getDestinationById } from '@/lib/data/destinations';
@@ -25,6 +26,7 @@ const COUNTRIES = [
 ];
 
 export function BookingModal({ isOpen, onClose, selectedPackage }) {
+  const [mounted, setMounted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -38,6 +40,10 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const destination = selectedPackage ? getDestinationById(selectedPackage.destinationId) : null;
   const destinationName = destination
@@ -83,6 +89,7 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     if (!formData.name.trim()) {
       setError('Please enter your full name.');
@@ -129,14 +136,20 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || !mounted) return null;
 
-  return (
-    <div className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-4">
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-3 sm:p-4"
+      onClick={(e) => e.stopPropagation()}
+    >
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
       />
 
       {/* Modal card */}
@@ -342,6 +355,7 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
 
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

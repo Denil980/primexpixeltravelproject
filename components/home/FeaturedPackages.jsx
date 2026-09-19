@@ -5,16 +5,16 @@ import Link from 'next/link';
 import { ResponsiveImage } from '@/components/ui/ResponsiveImage';
 import { packages } from '@/lib/data/packages';
 import { getDestinationById } from '@/lib/data/destinations';
-import { ClockIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 
-/* ─── Card dimensions ─────────────────────────────────────────────────────── */
-const CARD_W = 210;   // px
-const CARD_GAP = 22;  // px
+/* ─── Card dimensions (Matches Destination3DStack dimensions: 325px x 445px) ── */
+const CARD_W = 325;   // px
+const CARD_GAP = 28;  // px
 const CARD_SLOT = CARD_W + CARD_GAP;
 
 /* ─── Per-distance visual weights ────────────────────────────────────────── */
-const SCALES   = [1.10, 0.88, 0.74, 0.62, 0.52];
-const OPACITIES= [1.00, 0.78, 0.54, 0.34, 0.18];
+const SCALES   = [1.05, 0.88, 0.74, 0.62, 0.52];
+const OPACITIES= [1.00, 0.82, 0.56, 0.36, 0.18];
 const ROT_Y_PER_SLOT = 10; // degrees of Y-rotation per slot away from center
 
 /* ─── Portrait Package Card ──────────────────────────────────────────────── */
@@ -52,75 +52,71 @@ function Luxury3DCard({ pkg, onBookNow, isActive }) {
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={handleMouseLeave}
-      style={{ perspective: '900px' }}
+      style={{ perspective: '1000px' }}
     >
       <article
-        className="relative overflow-hidden w-full"
+        className="relative overflow-hidden w-full group"
         style={{
-          height: '300px',
-          borderRadius: '18px',
+          height: '445px',
+          borderRadius: '2rem',
           transformStyle: 'preserve-3d',
           transform: `rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
           transition: 'transform 0.35s cubic-bezier(0.23,1,0.32,1)',
-          /* Active card glows gold; others have dark shadow only */
           boxShadow: isActive
-            ? '0 0 0 2px rgba(201,164,92,0.70), 0 22px 55px -8px rgba(0,0,0,0.85), 0 0 40px 4px rgba(201,164,92,0.28)'
-            : '0 12px 36px -6px rgba(0,0,0,0.72)',
+            ? '0 0 0 2px #b8860b'
+            : 'none',
         }}
       >
         {/* Full-bleed image */}
         <ResponsiveImage
           src={pkg.image}
           alt={pkg.title}
-          width={420}
-          height={300}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-          style={{ transform: hovered && isActive ? 'scale(1.06)' : 'scale(1)' }}
+          width={650}
+          height={890}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out"
+          style={{ transform: hovered && isActive ? 'scale(1.07)' : 'scale(1)' }}
         />
 
-        {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+        {/* Gradient overlay for high-contrast legibility */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/35 to-transparent pointer-events-none" />
 
-        {/* Active badge */}
-        {isActive && (
-          <div className="absolute top-3 left-3 z-10">
-            <span className="rounded-full bg-[#c9a45c]/90 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-[#0d1f1f]">
+        {/* Top Badges Ribbon */}
+        <div className="absolute top-4 inset-x-4 flex items-center justify-between z-10">
+          {isActive ? (
+            <span className="rounded-full bg-[#b8860b] px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-md">
               Featured
             </span>
-          </div>
-        )}
+          ) : <div />}
 
-        {/* Duration top-right */}
-        <div className="absolute top-3 right-3 z-10">
-          <span className="flex items-center gap-1 rounded-full bg-black/50 border border-white/20 px-2 py-0.5 text-[9px] font-semibold text-white backdrop-blur-md">
-            <ClockIcon className="h-2.5 w-2.5 text-[#e2c78b]" />
+          <span className="flex items-center gap-1.5 rounded-full bg-black/60 border border-white/25 px-3 py-1 text-[10px] font-bold text-white backdrop-blur-md shadow-md">
+            <ClockIcon className="h-3 w-3 text-[#fef08a]" />
             {pkg.duration}
           </span>
         </div>
 
-        {/* Bottom info */}
-        <div className="absolute inset-x-0 bottom-0 z-10 px-3 py-3">
-          <h3 className="font-playfair text-[15px] font-bold leading-tight text-white drop-shadow-[0_1px_5px_rgba(0,0,0,1)] line-clamp-1">
+        {/* Bottom Content Area */}
+        <div className="absolute inset-x-0 bottom-0 z-10 p-5 sm:p-6 flex flex-col justify-end text-left">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#fef08a] mb-1">
+            {destName}
+          </span>
+          <h3 className="font-playfair text-xl sm:text-2xl font-black leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] line-clamp-2">
             {pkg.title}
           </h3>
-          <p className="mt-0.5 text-[9px] font-medium text-white/60 tracking-wide line-clamp-1">
-            {destName}
-          </p>
 
-          {/* Buttons */}
-          <div className="mt-2.5 flex items-center gap-2">
+          {/* Action Buttons */}
+          <div className="mt-4 flex items-center gap-2.5">
             <button
               type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 if (onBookNow) onBookNow(pkg);
               }}
-              className="flex-1 text-center rounded-full py-1.5 text-[10px] font-bold shadow-md transition-all duration-300 active:scale-95"
+              className="flex-1 text-center rounded-full py-2.5 text-xs font-bold shadow-lg transition-all duration-300 active:scale-95"
               style={{
                 background: isActive
-                  ? 'linear-gradient(135deg, #c9a45c, #f3dfab)'
-                  : 'rgba(255,255,255,0.18)',
-                color: isActive ? '#051417' : 'rgba(255,255,255,0.85)',
+                  ? 'linear-gradient(135deg, #b8860b, #d4af37)'
+                  : 'rgba(255,255,255,0.20)',
+                color: isActive ? '#ffffff' : 'rgba(255,255,255,0.90)',
               }}
             >
               Book Now
@@ -128,7 +124,7 @@ function Luxury3DCard({ pkg, onBookNow, isActive }) {
             <Link
               href={`/package/${pkg.id}`}
               onClick={(e) => e.stopPropagation()}
-              className="flex-1 text-center rounded-full py-1.5 text-[10px] font-bold border border-white/30 bg-white/10 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/25 active:scale-95"
+              className="flex-1 text-center rounded-full py-2.5 text-xs font-bold border border-white/35 bg-black/40 text-white backdrop-blur-md transition-all duration-300 hover:bg-white/25 active:scale-95"
             >
               View Details
             </Link>
@@ -213,7 +209,7 @@ export const FeaturedPackages = ({ onBookNow }) => {
     <section
       ref={sectionRef}
       id="featured-packages"
-      className="relative w-full overflow-hidden bg-[#F8FAFC] py-8"
+      className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden bg-[#F8FAFC] py-16 sm:py-20"
     >
       {/* ── Ambient Backdrop ── */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-40">
@@ -239,7 +235,7 @@ export const FeaturedPackages = ({ onBookNow }) => {
       {/* ── Infinite Coverflow Carousel ── */}
       <div
         className="relative overflow-hidden"
-        style={{ paddingTop: 20, paddingBottom: 36 }}
+        style={{ paddingTop: 24, paddingBottom: 44 }}
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
@@ -304,7 +300,7 @@ export const FeaturedPackages = ({ onBookNow }) => {
       </div>
 
       {/* ── Dot indicators ── */}
-      <div className="flex items-center justify-center gap-2 mt-2 mb-10">
+      <div className="flex items-center justify-center gap-2 mt-2 mb-6">
         {featuredPkgs.map((_, i) => (
           <button
             key={i}
@@ -322,6 +318,17 @@ export const FeaturedPackages = ({ onBookNow }) => {
             }}
           />
         ))}
+      </div>
+
+      {/* ── CTA Button ── */}
+      <div className="flex justify-center mt-2 mb-6">
+        <Link
+          href="/packages"
+          className="group inline-flex items-center gap-2.5 rounded-full bg-[#0f2c3f] px-7 py-3.5 text-xs sm:text-sm font-bold text-white shadow-lg shadow-[#0f2c3f]/20 transition-all duration-300 hover:bg-[#1e4d6b] hover:scale-105 active:scale-95"
+        >
+          <span>Explore More Packages</span>
+          <ArrowRightIcon className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
       </div>
     </section>
   );

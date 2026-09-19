@@ -171,7 +171,7 @@ export const ServicesSection = () => {
       ref={sectionRef}
       id="services"
       onMouseMove={handleMouseMove}
-      className="relative w-full overflow-hidden bg-[#F1F5F9] py-24 sm:py-32"
+      className="relative w-full min-h-screen flex flex-col justify-center overflow-hidden bg-[#F1F5F9] py-16 sm:py-20"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0">
         <div

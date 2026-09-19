@@ -105,9 +105,9 @@ export default async function PackagePage({ params }) {
         <div className="absolute inset-0 bg-gradient-to-r from-[#0f2c3f]/70 via-[#0f2c3f]/20 to-transparent" />
 
         <div className="absolute top-6 left-0 right-0 px-4 sm:px-8 z-10">
-          <Link href="/#featured-packages" className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors">
+          <Link href="/packages" className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition-colors bg-black/40 backdrop-blur-md px-4 py-2 rounded-full border border-white/20">
             <ArrowLeftIcon className="h-4 w-4" />
-            Back to Packages
+            Back to Packages & Destinations
           </Link>
         </div>
 

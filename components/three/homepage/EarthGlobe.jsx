@@ -196,9 +196,9 @@ export function EarthGlobe() {
       <div
         className="pointer-events-none absolute rounded-full"
         style={{
-          width: 700, height: 700,
-          background: 'radial-gradient(circle, rgba(34,211,238,0.18) 0%, rgba(20,140,160,0.08) 40%, transparent 68%)',
-          filter: 'blur(65px)',
+          width: 600, height: 600,
+          background: 'radial-gradient(circle, rgba(56,189,248,0.18) 0%, rgba(14,165,233,0.08) 50%, transparent 70%)',
+          filter: 'blur(30px)',
         }}
       />
 
@@ -215,32 +215,21 @@ export function EarthGlobe() {
           className="earth-globe-rotation absolute inset-0 rounded-full overflow-hidden"
           style={{
             backgroundImage: "url('/textures/earth/earth_atmos_2048.jpg')",
-            backgroundSize: 'cover',
-            backgroundPosition: '62% 42%',
+            backgroundSize: '200% 100%',
+            backgroundPosition: '62% 50%',
+            filter: 'brightness(1.10) contrast(1.08) saturate(1.20)',
             boxShadow: [
-              'inset -5rem -4rem 7rem rgba(2,10,18,0.95)',
-              'inset 2rem 1.5rem 3.5rem rgba(180,225,255,0.40)',
-              '0 30px 80px rgba(0,0,0,0.85)',
-              '0 0 60px rgba(56,189,248,0.28)',
+              'inset -2.5rem -2.5rem 4rem rgba(15,23,42,0.45)', // realistic 3D shadow on dark edge
+              'inset 1.5rem 1.5rem 3rem rgba(255,255,255,0.35)',    // sun highlight on light edge
+              '0 12px 40px rgba(14,165,233,0.25)',
+              '0 0 45px rgba(56,189,248,0.35)',
             ].join(', '),
           }}
         >
-          {/* Day/Night terminator */}
-          <span className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-tr from-[#020b14]/92 via-[#031524]/50 to-transparent" />
-          {/* Sun specular glare */}
-          <span
-            className="pointer-events-none absolute inset-0 rounded-full opacity-80"
-            style={{ background: 'radial-gradient(circle at 30% 28%, rgba(255,255,255,0.30) 0%, rgba(180,230,255,0.07) 38%, transparent 62%)' }}
-          />
-          {/* Rim atmosphere */}
+          {/* Subtle 3D Spherical Atmosphere Rim */}
           <span
             className="pointer-events-none absolute inset-0 rounded-full"
-            style={{ boxShadow: 'inset 0 0 22px rgba(56,189,248,0.55), inset 0 0 8px rgba(255,255,255,0.15)' }}
-          />
-          {/* City glow (night side) */}
-          <span
-            className="pointer-events-none absolute inset-0 rounded-full"
-            style={{ background: 'radial-gradient(circle at 18% 58%, rgba(255,195,70,0.10) 0%, transparent 38%)' }}
+            style={{ boxShadow: 'inset 0 0 20px rgba(56,189,248,0.60), inset 0 0 8px rgba(255,255,255,0.30)' }}
           />
         </div>
 

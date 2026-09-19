@@ -3,14 +3,23 @@
 import { useState } from 'react';
 import { BookingModal } from '@/components/home/BookingModal';
 
-export function BookNowButton({ pkg, className, style, children, ...props }) {
+export function BookNowButton({ pkg, className, style, children, onClick, ...props }) {
   const [open, setOpen] = useState(false);
+
+  const handleClick = (e) => {
+    if (e) {
+      e.stopPropagation();
+      if (typeof e.preventDefault === 'function') e.preventDefault();
+    }
+    if (onClick) onClick(e);
+    setOpen(true);
+  };
 
   return (
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={handleClick}
         className={className}
         style={style}
         {...props}
@@ -18,11 +27,13 @@ export function BookNowButton({ pkg, className, style, children, ...props }) {
         {children || 'Book Now'}
       </button>
 
-      <BookingModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        selectedPackage={pkg}
-      />
+      {open && (
+        <BookingModal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          selectedPackage={pkg}
+        />
+      )}
     </>
   );
 }

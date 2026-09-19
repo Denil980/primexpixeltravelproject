@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { HeroExperience } from '@/components/home/HeroExperience';
+import { HomeAboutSection } from '@/components/home/HomeAboutSection';
 import { DestinationsSection } from '@/components/home/DestinationsSection';
 import { FeaturedPackages } from '@/components/home/FeaturedPackages';
 import { ServicesSection } from '@/components/home/ServicesSection';
@@ -21,6 +22,7 @@ export function HomePage() {
   return (
     <>
       <HeroExperience onBookNow={() => setModalOpen(true)} />
+      <HomeAboutSection />
       <DestinationsSection />
       <FeaturedPackages onBookNow={handleBookNow} />
       <ServicesSection />

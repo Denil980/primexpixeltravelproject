@@ -64,7 +64,7 @@ export function HomeBookingSection() {
   return (
     <section
       id="contact"
-      className="scroll-mt-20 w-full overflow-hidden bg-[#F8FAFC] px-4 py-14 sm:px-6 sm:py-20 text-slate-900"
+      className="scroll-mt-20 w-full min-h-screen flex flex-col justify-center overflow-hidden bg-[#F8FAFC] px-4 py-16 sm:px-6 sm:py-20 text-slate-900"
     >
       <div className="mx-auto w-full max-w-5xl rounded-3xl border border-slate-200 bg-white p-6 shadow-xl sm:p-8 md:p-10">
         <div className="mb-8">

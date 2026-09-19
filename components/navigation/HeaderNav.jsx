@@ -2,17 +2,19 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/lib/config';
 
 export const HeaderNav = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 25);
 
-      const sections = ['hero', 'destinations', 'featured-packages', 'services', 'contact-booking', 'contact'];
+      const sections = ['hero', 'about-section', 'destinations', 'featured-packages', 'services', 'contact-booking', 'contact'];
       const scrollPos = window.scrollY + 160;
 
       for (let i = sections.length - 1; i >= 0; i--) {
@@ -30,12 +32,24 @@ export const HeaderNav = () => {
   }, []);
 
   const navLinks = [
-    { id: 'hero', href: '/#hero', label: 'Home' },
-    { id: 'destinations', href: '/#destinations', label: 'Destinations' },
-    { id: 'featured-packages', href: '/#featured-packages', label: 'Packages' },
+    { id: 'hero', href: '/', label: 'Home' },
+    { id: 'about', href: '/about', label: 'About Us' },
+    { id: 'destinations', href: '/destinations', label: 'Destinations' },
+    { id: 'packages', href: '/packages', label: 'Packages' },
     { id: 'services', href: '/#services', label: 'Benefits' },
-    { id: 'contact', href: '/#contact', label: 'Contact' },
+    { id: 'contact', href: '/contact', label: 'Contact' },
   ];
+
+  const checkIsActive = (link) => {
+    if (link.href === '/') {
+      return pathname === '/' && (activeSection === 'hero' || activeSection === '');
+    }
+    if (link.href.startsWith('/#')) {
+      const sectionId = link.href.replace('/#', '');
+      return pathname === '/' && activeSection === sectionId;
+    }
+    return pathname === link.href || pathname.startsWith(link.href + '/');
+  };
 
   return (
     <header
@@ -96,7 +110,7 @@ export const HeaderNav = () => {
           <nav className="hidden md:flex items-center rounded-full border border-slate-200 bg-slate-50/80 px-2 sm:px-3 py-1 sm:py-1.5 backdrop-blur-md shadow-sm">
             <ul className="flex items-center gap-0.5 sm:gap-1">
               {navLinks.map((link) => {
-                const isActive = activeSection === link.id;
+                const isActive = checkIsActive(link);
                 return (
                   <li key={link.label}>
                     <Link
@@ -124,7 +138,7 @@ export const HeaderNav = () => {
         {/* Mobile Horizontal Bar */}
         <div className="md:hidden mt-2 pt-1.5 pb-0.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth">
           {navLinks.map((link) => {
-            const isActive = activeSection === link.id;
+            const isActive = checkIsActive(link);
             return (
               <Link
                 key={`m-pill-${link.label}`}

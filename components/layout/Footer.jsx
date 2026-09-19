@@ -5,11 +5,11 @@ import { PhoneIcon, EnvelopeIcon, MapPinIcon, ClockIcon, GlobeAltIcon } from '@h
 
 const navLinks = [
   { label: 'Home', href: '/' },
-  { label: 'Destinations', href: '/#destinations' },
-  { label: 'Tour Packages', href: '/#featured-packages' },
-  { label: 'Services', href: '/#services' },
   { label: 'About Us', href: '/about' },
-  { label: 'Contact / Booking', href: '/#contact-booking' },
+  { label: 'Destinations', href: '/destinations' },
+  { label: 'Tour Packages', href: '/packages' },
+  { label: 'Services', href: '/#services' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export const Footer = () => (
