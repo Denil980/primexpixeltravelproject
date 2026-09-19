@@ -42,11 +42,11 @@ export default async function DestinationPage({ params }) {
               <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-[#D4AF37]">Curated itineraries</p>
               <h2 className="font-playfair text-3xl font-bold text-gray-900 sm:text-4xl">Packages for {destination.city}</h2>
             </div>
-            <Link href="/contact">
+            <Link href="/#contact">
               <Button intent="secondary" className="border border-[#0A3D62] text-[#0A3D62]">Plan a custom journey <ArrowRightIcon className="ml-2 h-4 w-4"/></Button>
             </Link>
           </div>
-          {destinationPackages.length > 0 ? (<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">{destinationPackages.map((pkg) => <PackageCard key={pkg.id} pkg={pkg}/>)}</div>) : (<div className="rounded-2xl border border-gray-200 bg-white p-8 text-center"><p className="text-gray-600">We are currently preparing packages for this destination.</p><Link href="/contact" className="mt-4 inline-flex font-semibold text-[#0A3D62]">Speak with a specialist <ArrowRightIcon className="ml-1 h-4 w-4"/></Link></div>)}
+          {destinationPackages.length > 0 ? (<div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">{destinationPackages.map((pkg) => <PackageCard key={pkg.id} pkg={pkg}/>)}</div>) : (<div className="rounded-2xl border border-gray-200 bg-white p-8 text-center"><p className="text-gray-600">We are currently preparing packages for this destination.</p><Link href="/#contact" className="mt-4 inline-flex font-semibold text-[#0A3D62]">Speak with a specialist <ArrowRightIcon className="ml-1 h-4 w-4"/></Link></div>)}
         </Container>
       </Section>
     </div>);

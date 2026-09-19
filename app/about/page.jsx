@@ -259,7 +259,7 @@ export default function AboutPage() {
           </p>
           <div className="flex justify-center items-center">
             <Link
-              href="/contact"
+              href="/#contact"
               className="inline-flex items-center gap-2 bg-[#b8860b] text-white font-bold px-8 py-3.5 rounded-full text-sm hover:bg-[#a17509] transition-all shadow-lg hover:scale-105"
             >
               <span>Send an Inquiry</span>

@@ -40,7 +40,7 @@ export const PackageBookingCard = ({ pkg, destinationName }) => {
             </Button>
           </Link>
 
-          <Link href="/contact" className="block w-full text-center">
+          <Link href="/#contact" className="block w-full text-center">
             <Button intent="secondary" size="md" className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold py-3 rounded-xl transition-colors text-sm inline-flex items-center justify-center gap-2">
               <PhoneIcon className="h-4 w-4 text-[#D4AF37]"/>
               <span>Inquire Specialist</span>

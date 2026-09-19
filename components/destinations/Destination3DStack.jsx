@@ -1,13 +1,28 @@
 "use client";
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import {
   MapPinIcon,
   SparklesIcon,
+  ArrowRightIcon,
 } from '@heroicons/react/24/outline';
 
+const getPackageIdForDestination = (dest) => {
+  if (dest.packageId) return dest.packageId;
+  const id = (dest.id || dest.city || '').toLowerCase();
+  if (id.includes('kashmir')) return 'kashmir-essentials';
+  if (id.includes('dubai')) return 'dubai-luxury-escape';
+  if (id.includes('maldives')) return 'maldives-sanctuary';
+  if (id.includes('switzerland')) return 'switzerland-alpine-grandeur';
+  if (id.includes('thailand')) return 'thailand-island-escape';
+  if (id.includes('paris')) return 'paris-lights-romance';
+  return 'kashmir-essentials';
+};
+
 export function Destination3DStack({ destinations }) {
+  const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -167,6 +182,9 @@ export function Destination3DStack({ destinations }) {
                 onClick={() => {
                   if (!isFront) {
                     setActiveIndex(idx);
+                  } else {
+                    const targetPkgId = getPackageIdForDestination(dest);
+                    router.push(`/package/${targetPkgId}`);
                   }
                 }}
                 drag={isFront ? 'x' : false}
@@ -230,6 +248,15 @@ export function Destination3DStack({ destinations }) {
                       <p className="mt-1 text-xs text-white/90 font-sans font-semibold tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.9)]">
                         {dest.subtitle || dest.description?.slice(0, 30) || 'Scenic Escape'}
                       </p>
+                    </div>
+
+                    <div className={`inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-bold transition-all duration-300 ${
+                      isFront
+                        ? 'bg-[#b8860b] text-white shadow-lg hover:bg-[#a17509] hover:scale-105 active:scale-95'
+                        : 'bg-white/20 text-white backdrop-blur-md opacity-80'
+                    }`}>
+                      <span>View Details</span>
+                      <ArrowRightIcon className="h-3.5 w-3.5" />
                     </div>
                   </div>
 

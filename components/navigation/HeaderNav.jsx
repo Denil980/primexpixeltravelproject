@@ -37,7 +37,7 @@ export const HeaderNav = () => {
     { id: 'destinations', href: '/destinations', label: 'Destinations' },
     { id: 'packages', href: '/packages', label: 'Packages' },
     { id: 'services', href: '/#services', label: 'Benefits' },
-    { id: 'contact', href: '/contact', label: 'Contact' },
+    { id: 'contact', href: '/#contact', label: 'Contact' },
   ];
 
   const checkIsActive = (link) => {
