@@ -13,7 +13,6 @@ import {
   BriefcaseIcon,
   SparklesIcon,
   EnvelopeIcon,
-  PhoneIcon,
 } from '@heroicons/react/24/outline';
 
 export const HeaderNav = () => {
@@ -244,20 +243,6 @@ export const HeaderNav = () => {
                   </Link>
                 );
               })}
-            </div>
-
-            {/* Quick Action CTAs */}
-            <div className="pt-3 border-t border-slate-100 space-y-2">
-              <a
-                href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to inquire about your tour packages.")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center gap-2 w-full rounded-2xl bg-[#25D366] py-3 text-xs font-bold text-white shadow-md hover:bg-[#1ebe5c] active:scale-95 transition-all"
-              >
-                <PhoneIcon className="h-4 w-4" />
-                <span>Chat on WhatsApp</span>
-              </a>
             </div>
           </div>
         </div>
