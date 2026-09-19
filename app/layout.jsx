@@ -4,13 +4,15 @@ import { HeaderNav } from '@/components/navigation/HeaderNav';
 import { Footer } from '@/components/layout/Footer';
 // Load Inter for body/UI text
 const inter = Inter({
-    subsets: ["latin"],
-    variable: "--font-inter",
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: 'swap',
 });
 // Load Playfair Display for headings
 const playfair = Playfair_Display({
-    subsets: ["latin"],
-    variable: "--font-playfair",
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: 'swap',
 });
 export const metadata = {
     title: "Tours & Travels — Kashmir & International Packages",
