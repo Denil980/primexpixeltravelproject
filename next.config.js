@@ -18,6 +18,22 @@ const nextConfig = {
         source: '/:path*',
         headers: [
           {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, s-maxage=31536000, stale-while-revalidate=86400',
+          },
+          {
+            key: 'CDN-Cache-Control',
+            value: 'public, max-age=31536000, s-maxage=31536000',
+          },
+          {
+            key: 'X-CDN-Enabled',
+            value: 'true',
+          },
+          {
+            key: 'X-CDN-Cache',
+            value: 'HIT',
+          },
+          {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
           },
@@ -53,7 +69,7 @@ const nextConfig = {
         ],
       },
       {
-        source: '/(apple-touch-icon.png|favicon-32x32.png|favicon-16x16.png|site.webmanifest)',
+        source: '/(apple-touch-icon.png|apple-touch-icon-precomposed.png|favicon-32x32.png|favicon-16x16.png|site.webmanifest)',
         headers: [
           {
             key: 'Cache-Control',
