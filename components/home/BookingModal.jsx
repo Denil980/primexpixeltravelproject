@@ -224,10 +224,12 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
 
               {/* Full Name */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Full Name *</label>
+                <label htmlFor="booking-name" className="block text-xs font-semibold text-slate-700 mb-1">Full Name *</label>
                 <input
+                  id="booking-name"
                   type="text"
                   name="name"
+                  autoComplete="name"
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter your full name"
@@ -237,10 +239,12 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
 
               {/* Email */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Email *</label>
+                <label htmlFor="booking-email" className="block text-xs font-semibold text-slate-700 mb-1">Email *</label>
                 <input
+                  id="booking-email"
                   type="email"
                   name="email"
+                  autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="your.email@example.com"
@@ -250,10 +254,12 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
 
               {/* Phone with Country Code */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Phone (with Country Code) *</label>
+                <label htmlFor="booking-phone" className="block text-xs font-semibold text-slate-700 mb-1">Phone (with Country Code) *</label>
                 <input
+                  id="booking-phone"
                   type="tel"
                   name="phone"
+                  autoComplete="tel"
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="e.g. +91 98765 43210"
@@ -263,9 +269,11 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
 
               {/* Country */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Country *</label>
+                <label htmlFor="booking-country" className="block text-xs font-semibold text-slate-700 mb-1">Country *</label>
                 <select
+                  id="booking-country"
                   name="country"
+                  autoComplete="country-name"
                   value={formData.country}
                   onChange={handleChange}
                   className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
@@ -282,10 +290,12 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
               {/* Adults & Children */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Number of Adults *</label>
+                  <label htmlFor="booking-adults" className="block text-xs font-semibold text-slate-700 mb-1">Number of Adults *</label>
                   <input
+                    id="booking-adults"
                     type="number"
                     name="adults"
+                    autoComplete="off"
                     min="1"
                     max="50"
                     value={formData.adults}
@@ -294,10 +304,12 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">Number of Children</label>
+                  <label htmlFor="booking-children" className="block text-xs font-semibold text-slate-700 mb-1">Number of Children</label>
                   <input
+                    id="booking-children"
                     type="number"
                     name="children"
+                    autoComplete="off"
                     min="0"
                     max="20"
                     value={formData.children}
@@ -309,10 +321,12 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
 
               {/* Preferred Travel Date */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Preferred Travel Date *</label>
+                <label htmlFor="booking-travel-date" className="block text-xs font-semibold text-slate-700 mb-1">Preferred Travel Date *</label>
                 <input
+                  id="booking-travel-date"
                   type="date"
                   name="travelDate"
+                  autoComplete="off"
                   value={formData.travelDate}
                   onChange={handleChange}
                   className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20 [color-scheme:light]"
@@ -321,9 +335,11 @@ export function BookingModal({ isOpen, onClose, selectedPackage }) {
 
               {/* Special Requirements */}
               <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Special Requirements</label>
+                <label htmlFor="booking-special-requirements" className="block text-xs font-semibold text-slate-700 mb-1">Special Requirements</label>
                 <textarea
+                  id="booking-special-requirements"
                   name="specialRequirements"
+                  autoComplete="off"
                   rows={2}
                   value={formData.specialRequirements}
                   onChange={handleChange}

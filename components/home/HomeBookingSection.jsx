@@ -97,63 +97,91 @@ export function HomeBookingSection() {
           <form ref={contactFormRef} onSubmit={handleContactSubmit} className="grid gap-4 md:grid-cols-2">
 
             {/* Name */}
-            <input
-              aria-label="Contact name"
-              value={contact.name}
-              onChange={(e) => setContact({ ...contact, name: e.target.value })}
-              className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
-              placeholder="Name *"
-              disabled={contactStatus === 'sending'}
-            />
+            <div>
+              <label htmlFor="contact-name" className="sr-only">Contact Name</label>
+              <input
+                id="contact-name"
+                name="name"
+                autoComplete="name"
+                aria-label="Contact name"
+                value={contact.name}
+                onChange={(e) => setContact({ ...contact, name: e.target.value })}
+                className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
+                placeholder="Name *"
+                disabled={contactStatus === 'sending'}
+              />
+            </div>
 
             {/* Email */}
-            <input
-              aria-label="Contact email"
-              type="email"
-              value={contact.email}
-              onChange={(e) => setContact({ ...contact, email: e.target.value })}
-              className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
-              placeholder="Email *"
-              disabled={contactStatus === 'sending'}
-            />
+            <div>
+              <label htmlFor="contact-email" className="sr-only">Contact Email</label>
+              <input
+                id="contact-email"
+                name="email"
+                autoComplete="email"
+                aria-label="Contact email"
+                type="email"
+                value={contact.email}
+                onChange={(e) => setContact({ ...contact, email: e.target.value })}
+                className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
+                placeholder="Email *"
+                disabled={contactStatus === 'sending'}
+              />
+            </div>
 
             {/* Phone Number (Required) */}
-            <input
-              aria-label="Contact phone"
-              type="tel"
-              value={contact.phone}
-              onChange={(e) => setContact({ ...contact, phone: e.target.value })}
-              className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
-              placeholder="Phone Number *"
-              disabled={contactStatus === 'sending'}
-            />
+            <div>
+              <label htmlFor="contact-phone" className="sr-only">Contact Phone</label>
+              <input
+                id="contact-phone"
+                name="phone"
+                autoComplete="tel"
+                aria-label="Contact phone"
+                type="tel"
+                value={contact.phone}
+                onChange={(e) => setContact({ ...contact, phone: e.target.value })}
+                className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
+                placeholder="Phone Number *"
+                disabled={contactStatus === 'sending'}
+              />
+            </div>
 
             {/* Enquiry Type Dropdown */}
-            <select
-              aria-label="Enquiry Type"
-              value={contact.enquiryType}
-              onChange={(e) => setContact({ ...contact, enquiryType: e.target.value })}
-              className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
-              disabled={contactStatus === 'sending'}
-            >
-              <option value="" disabled>Select Enquiry Type *</option>
-              {ENQUIRY_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
+            <div>
+              <label htmlFor="contact-enquiry-type" className="sr-only">Enquiry Type</label>
+              <select
+                id="contact-enquiry-type"
+                name="enquiryType"
+                aria-label="Enquiry Type"
+                value={contact.enquiryType}
+                onChange={(e) => setContact({ ...contact, enquiryType: e.target.value })}
+                className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
+                disabled={contactStatus === 'sending'}
+              >
+                <option value="" disabled>Select Enquiry Type *</option>
+                {ENQUIRY_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            </div>
 
             {/* Message Textarea */}
-            <textarea
-              aria-label="Contact message"
-              rows={3}
-              value={contact.message}
-              onChange={(e) => setContact({ ...contact, message: e.target.value })}
-              className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20 md:col-span-2"
-              placeholder="How can we help? *"
-              disabled={contactStatus === 'sending'}
-            />
+            <div className="md:col-span-2">
+              <label htmlFor="contact-message" className="sr-only">Contact Message</label>
+              <textarea
+                id="contact-message"
+                name="message"
+                aria-label="Contact message"
+                rows={3}
+                value={contact.message}
+                onChange={(e) => setContact({ ...contact, message: e.target.value })}
+                className="w-full rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#b8860b] focus:bg-white focus:ring-2 focus:ring-[#b8860b]/20"
+                placeholder="How can we help? *"
+                disabled={contactStatus === 'sending'}
+              />
+            </div>
 
             {/* Footer Row */}
             <div className="flex flex-col gap-3 md:col-span-2 md:flex-row md:items-center md:justify-between pt-2">

@@ -329,8 +329,13 @@ export default function DestinationsPage() {
 
             {/* Live Search Input */}
             <div className="relative w-full md:w-72">
+              <label htmlFor="destinations-search-input" className="sr-only">Search destination or country</label>
               <input
+                id="destinations-search-input"
+                name="searchQuery"
                 type="text"
+                autoComplete="off"
+                aria-label="Search destination or country"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search destination or country..."
