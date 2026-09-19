@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Container } from '@/components/ui/Container';
 import { BookNowButton } from '@/components/home/BookNowButton';
 import { destinations, getPackagesForDestination } from '@/lib/data/destinations';
@@ -362,130 +362,118 @@ export default function DestinationsPage() {
               </button>
             </div>
           ) : (
-            <AnimatePresence mode="popLayout">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 overflow-visible">
-                {filteredDestinations.map((dest, idx) => {
-                  const matchedPackages = getPackagesForDestination(dest.id);
-                  const targetPackage =
-                    matchedPackages[0] ||
-                    packages.find((p) => p.destinationId.toLowerCase() === dest.id.toLowerCase()) ||
-                    packages[0];
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {filteredDestinations.map((dest, idx) => {
+                const matchedPackages = getPackagesForDestination(dest.id);
+                const targetPackage =
+                  matchedPackages[0] ||
+                  packages.find((p) => p.destinationId.toLowerCase() === dest.id.toLowerCase()) ||
+                  packages[0];
 
-                  const targetUrl = `/package/${targetPackage.id}`;
+                const targetUrl = `/package/${targetPackage.id}`;
+                const delay = (idx % 3) * 0.08;
 
-                  const col = idx % 3;
-                  const row = Math.floor(idx / 3);
+                return (
+                  <motion.div
+                    key={`${dest.id}-${activeCategory}-${filterKey}`}
+                    initial={{
+                      opacity: 0,
+                      y: 45,
+                      scale: 0.98,
+                    }}
+                    whileInView={{
+                      opacity: 1,
+                      y: 0,
+                      scale: 1,
+                    }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 110,
+                      damping: 18,
+                      mass: 0.7,
+                      delay,
+                    }}
+                    className="group relative rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:-translate-y-2 hover:shadow-2xl hover:border-[#b8860b]/50 flex flex-col transform-gpu transition-all duration-300"
+                  >
+                    {/* Image Header with Hover Scale */}
+                    <div className="relative h-64 sm:h-72 w-full overflow-hidden shrink-0 bg-[#0f2c3f]">
+                      <img
+                        src={dest.image}
+                        alt={dest.city}
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
 
-                  // Stack offset: card starts offset to the left for smooth left-to-right fan out
-                  const startX = -col * 160 - 40;
+                      {/* Code Tag */}
+                      {dest.code && (
+                        <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 rounded-full bg-black/60 border border-white/25 px-3 py-1 backdrop-blur-md shadow-md">
+                          <MapPinIcon className="h-3 w-3 text-[#fef08a]" />
+                          <span className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">
+                            {dest.code}
+                          </span>
+                        </div>
+                      )}
 
-                  return (
-                    <motion.div
-                      key={`${dest.id}-${activeCategory}-${filterKey}`}
-                      initial={{
-                        opacity: 0,
-                        x: startX,
-                        y: 35,
-                        scale: 0.92,
-                        rotate: idx % 2 === 0 ? 2 : -2,
-                      }}
-                      whileInView={{
-                        opacity: 1,
-                        x: 0,
-                        y: 0,
-                        scale: 1,
-                        rotate: 0,
-                      }}
-                      viewport={{ once: false, amount: 0.1 }}
-                      exit={{ opacity: 0, scale: 0.9, y: 15 }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 150,
-                        damping: 17,
-                        mass: 0.55,
-                        delay: (idx % 3) * 0.04,
-                      }}
-                      className="group relative rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:-translate-y-2 hover:shadow-2xl hover:border-[#b8860b]/50 flex flex-col transform-gpu transition-shadow duration-300"
-                    >
-                      {/* Image Header with Hover Scale */}
-                      <div className="relative h-64 sm:h-72 w-full overflow-hidden shrink-0 bg-[#0f2c3f]">
-                        <img
-                          src={dest.image}
-                          alt={dest.city}
-                          className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                      {dest.featured && (
+                        <div className="absolute top-4 right-4 z-10 flex items-center gap-1 rounded-full bg-[#b8860b] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md">
+                          <SparklesIcon className="h-3 w-3" />
+                          <span>Signature</span>
+                        </div>
+                      )}
 
-                        {/* Code Tag */}
-                        {dest.code && (
-                          <div className="absolute top-4 left-4 z-10 flex items-center gap-1.5 rounded-full bg-black/60 border border-white/25 px-3 py-1 backdrop-blur-md shadow-md">
-                            <MapPinIcon className="h-3 w-3 text-[#fef08a]" />
-                            <span className="font-mono text-[10px] font-bold text-white uppercase tracking-wider">
-                              {dest.code}
+                      {/* Title Overlay */}
+                      <div className="absolute bottom-4 left-5 right-5 text-white">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#fef08a] block mb-0.5">
+                          {dest.country}
+                        </span>
+                        <h3 className="font-playfair text-2xl font-black group-hover:text-[#fef08a] transition-colors leading-tight">
+                          {dest.city}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Card Content (No Price Tags) */}
+                    <div className="p-6 flex-1 flex flex-col justify-between">
+                      <div>
+                        <p className="font-sans text-xs sm:text-sm text-slate-600 leading-relaxed">
+                          {dest.description}
+                        </p>
+
+                        {/* Matching Package Tag */}
+                        {targetPackage && (
+                          <div className="mt-4 flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
+                            <CheckBadgeIcon className="h-4 w-4 text-[#b8860b] shrink-0" />
+                            <span className="font-sans text-xs font-semibold text-slate-700 truncate">
+                              {targetPackage.title}
                             </span>
                           </div>
                         )}
-
-                        {dest.featured && (
-                          <div className="absolute top-4 right-4 z-10 flex items-center gap-1 rounded-full bg-[#b8860b] px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md">
-                            <SparklesIcon className="h-3 w-3" />
-                            <span>Signature</span>
-                          </div>
-                        )}
-
-                        {/* Title Overlay */}
-                        <div className="absolute bottom-4 left-5 right-5 text-white">
-                          <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#fef08a] block mb-0.5">
-                            {dest.country}
-                          </span>
-                          <h3 className="font-playfair text-2xl font-black group-hover:text-[#fef08a] transition-colors leading-tight">
-                            {dest.city}
-                          </h3>
-                        </div>
                       </div>
 
-                      {/* Card Content (No Price Tags) */}
-                      <div className="p-6 flex-1 flex flex-col justify-between">
-                        <div>
-                          <p className="font-sans text-xs sm:text-sm text-slate-600 leading-relaxed">
-                            {dest.description}
-                          </p>
-
-                          {/* Matching Package Tag */}
-                          {targetPackage && (
-                            <div className="mt-4 flex items-center gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200/80">
-                              <CheckBadgeIcon className="h-4 w-4 text-[#b8860b] shrink-0" />
-                              <span className="font-sans text-xs font-semibold text-slate-700 truncate">
-                                {targetPackage.title}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Footer CTA Buttons */}
-                        <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
-                          {targetPackage && (
-                            <BookNowButton
-                              pkg={targetPackage}
-                              className="flex-1 inline-flex items-center justify-center rounded-full bg-[#b8860b] px-4 py-2.5 text-xs font-bold text-white transition-all duration-300 hover:bg-[#a17509] shadow-md hover:scale-105 active:scale-95 cursor-pointer"
-                            >
-                              Book Now
-                            </BookNowButton>
-                          )}
-                          <Link
-                            href={targetUrl}
-                            className={`${targetPackage ? 'flex-1' : 'w-full'} inline-flex items-center justify-center gap-1.5 rounded-full bg-[#0f2c3f] px-4 py-2.5 text-xs font-bold text-white transition-all duration-300 hover:bg-[#1e4d6b] shadow-md group-hover:shadow-lg group-hover:scale-[1.02] active:scale-95`}
+                      {/* Footer CTA Buttons */}
+                      <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-2">
+                        {targetPackage && (
+                          <BookNowButton
+                            pkg={targetPackage}
+                            className="flex-1 inline-flex items-center justify-center rounded-full bg-[#b8860b] px-4 py-2.5 text-xs font-bold text-white transition-all duration-300 hover:bg-[#a17509] shadow-md hover:scale-105 active:scale-95 cursor-pointer"
                           >
-                            <span>View Details</span>
-                            <ArrowRightIcon className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-                          </Link>
-                        </div>
+                            Book Now
+                          </BookNowButton>
+                        )}
+                        <Link
+                          href={targetUrl}
+                          className={`${targetPackage ? 'flex-1' : 'w-full'} inline-flex items-center justify-center gap-1.5 rounded-full bg-[#0f2c3f] px-4 py-2.5 text-xs font-bold text-white transition-all duration-300 hover:bg-[#1e4d6b] shadow-md group-hover:shadow-lg group-hover:scale-[1.02] active:scale-95`}
+                        >
+                          <span>View Details</span>
+                          <ArrowRightIcon className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                        </Link>
                       </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </AnimatePresence>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           )}
         </Container>
       </section>
