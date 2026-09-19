@@ -4,11 +4,27 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/lib/config';
+import {
+  EllipsisVerticalIcon,
+  XMarkIcon,
+  HomeIcon,
+  UserGroupIcon,
+  MapPinIcon,
+  BriefcaseIcon,
+  SparklesIcon,
+  EnvelopeIcon,
+  PhoneIcon,
+} from '@heroicons/react/24/outline';
 
 export const HeaderNav = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,13 +47,21 @@ export const HeaderNav = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setMenuOpen(false);
+    };
+    if (menuOpen) window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [menuOpen]);
+
   const navLinks = [
-    { id: 'hero', href: '/', label: 'Home' },
-    { id: 'about', href: '/about', label: 'About Us' },
-    { id: 'destinations', href: '/destinations', label: 'Destinations' },
-    { id: 'packages', href: '/packages', label: 'Packages' },
-    { id: 'services', href: '/#services', label: 'Benefits' },
-    { id: 'contact', href: '/#contact', label: 'Contact' },
+    { id: 'hero', href: '/', label: 'Home', icon: HomeIcon },
+    { id: 'about', href: '/about', label: 'About Us', icon: UserGroupIcon },
+    { id: 'destinations', href: '/destinations', label: 'Destinations', icon: MapPinIcon },
+    { id: 'packages', href: '/packages', label: 'Packages', icon: BriefcaseIcon },
+    { id: 'services', href: '/#services', label: 'Benefits', icon: SparklesIcon },
+    { id: 'contact', href: '/#contact', label: 'Contact', icon: EnvelopeIcon },
   ];
 
   const checkIsActive = (link) => {
@@ -106,7 +130,7 @@ export const HeaderNav = () => {
             </div>
           </Link>
 
-          {/* Nav Links */}
+          {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center rounded-full border border-slate-200 bg-slate-50/80 px-2 sm:px-3 py-1 sm:py-1.5 backdrop-blur-md shadow-sm">
             <ul className="flex items-center gap-0.5 sm:gap-1">
               {navLinks.map((link) => {
@@ -132,29 +156,95 @@ export const HeaderNav = () => {
             </ul>
           </nav>
 
-
-        </div>
-
-        {/* Mobile Horizontal Bar */}
-        <div className="md:hidden mt-2 pt-1.5 pb-0.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar scroll-smooth">
-          {navLinks.map((link) => {
-            const isActive = checkIsActive(link);
-            return (
-              <Link
-                key={`m-pill-${link.label}`}
-                href={link.href}
-                className={`whitespace-nowrap px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all duration-200 shrink-0 ${
-                  isActive
-                    ? 'bg-[#0f2c3f] text-white border border-[#0f2c3f]'
-                    : 'bg-slate-100 text-slate-700 border border-slate-200 hover:bg-slate-200'
-                }`}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+          {/* Mobile & Tablet Right Corner Three-Dot Menu Button */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="md:hidden relative flex h-10 w-10 items-center justify-center rounded-full bg-[#0f2c3f] text-[#fef08a] border border-[#b8860b]/50 shadow-md hover:bg-[#163c54] active:scale-95 transition-all duration-200 shrink-0"
+            aria-label="Toggle navigation menu"
+          >
+            <EllipsisVerticalIcon className="h-6 w-6 text-[#fef08a]" />
+          </button>
         </div>
       </div>
+
+      {/* Mobile & Tablet Options Drawer / Pop-up Menu */}
+      {menuOpen && (
+        <div className="md:hidden fixed inset-0 z-[100] flex flex-col justify-start pt-16 px-3 sm:px-4 pb-6">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-slate-900/65 backdrop-blur-md transition-opacity"
+            onClick={() => setMenuOpen(false)}
+          />
+
+          {/* Menu Card */}
+          <div className="relative z-10 w-full max-w-sm ml-auto rounded-3xl border border-slate-200/90 bg-white p-5 sm:p-6 shadow-2xl overflow-hidden flex flex-col space-y-4">
+            {/* Top Gold Bar */}
+            <div className="h-1.5 w-full bg-gradient-to-r from-[#b8860b] via-[#d4af37] to-[#0f2c3f] absolute top-0 inset-x-0" />
+
+            {/* Header */}
+            <div className="flex items-center justify-between pt-1 pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-[#b8860b] animate-ping" />
+                <span className="font-mono text-xs font-bold uppercase tracking-widest text-[#0f2c3f]">
+                  Menu & Quick Access
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setMenuOpen(false)}
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition-colors"
+                aria-label="Close menu"
+              >
+                <XMarkIcon className="h-4 w-4" />
+              </button>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="space-y-1.5 py-1">
+              {navLinks.map((link) => {
+                const isActive = checkIsActive(link);
+                const IconComponent = link.icon;
+
+                return (
+                  <Link
+                    key={`mob-${link.label}`}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`flex items-center justify-between px-4 py-3 rounded-2xl text-xs font-bold uppercase tracking-wider transition-all duration-200 ${
+                      isActive
+                        ? 'bg-[#0f2c3f] text-[#fef08a] shadow-md border border-[#0f2c3f]'
+                        : 'text-slate-700 bg-slate-50/80 border border-slate-100 hover:bg-slate-100 hover:text-[#0f2c3f]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <IconComponent className={`h-4 w-4 ${isActive ? 'text-[#b8860b]' : 'text-slate-500'}`} />
+                      <span>{link.label}</span>
+                    </div>
+                    {isActive && (
+                      <span className="h-2 w-2 rounded-full bg-[#b8860b]" />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Quick Action CTAs */}
+            <div className="pt-3 border-t border-slate-100 space-y-2">
+              <a
+                href={`https://wa.me/${siteConfig.whatsappNumber}?text=${encodeURIComponent("Hi! I'd like to inquire about your tour packages.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center justify-center gap-2 w-full rounded-2xl bg-[#25D366] py-3 text-xs font-bold text-white shadow-md hover:bg-[#1ebe5c] active:scale-95 transition-all"
+              >
+                <PhoneIcon className="h-4 w-4" />
+                <span>Chat on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </header>
   );
 };
